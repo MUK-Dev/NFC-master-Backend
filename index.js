@@ -1,3 +1,3 @@
-const { ExpressApp } = require('./app');
+const { ExpressApp } = require('./app')
 
-new ExpressApp().runApp();
+new ExpressApp().runApp()

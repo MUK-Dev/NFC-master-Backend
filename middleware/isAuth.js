@@ -1,15 +1,20 @@
-const HttpError = require('../utils/HttpError');
+require('dotenv').config()
+const jwt = require('jsonwebtoken')
 
-module.exports = {
-  isAuth: (req, res, next) => {
-    if (!req.session.isAuth) {
-      const error = new HttpError('Access Denied', 403, 'Unauthorized');
-      next(error);
-    }
-  },
-};
+module.exports = (req, res, next) => {
+  if (!req.headers.authorization) {
+    throw new HttpError('No token provided', 404, 'token')
+  }
+  const token = req.headers.authorization.split(' ')[1]
 
-// req.session.destroy(err=>{
-//     if(err) throw err;
-
-// })
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_KEY)
+    req.userInfo = decoded
+    next()
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(401)
+      .send({ message: 'Could not Authentication', type: 'token' })
+  }
+}

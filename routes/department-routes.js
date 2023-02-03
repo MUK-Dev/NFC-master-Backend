@@ -1,12 +1,13 @@
-const express = require('express');
+const express = require('express')
 
-const { registerDepartment } = require('../controllers/department-controller');
+const { registerDepartment } = require('../controllers/department-controller')
+const isAuth = require('../middleware/isAuth')
 
-const router = express.Router();
+const router = express.Router()
 
-router.route('/api/departments').get().post(registerDepartment);
+router.route('/api/departments').get().post(isAuth, registerDepartment)
 
-module.exports = router;
+module.exports = router
 
 /*
 MVC Pattern:

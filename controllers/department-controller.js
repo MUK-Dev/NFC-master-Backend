@@ -1,21 +1,19 @@
-const Model = require('../models/department-model');
-const HttpError = require('../utils/HttpError');
+const Model = require('../models/department-model')
 
 const registerDepartment = async (req, res, next) => {
   const { department_name, department_abbreviation, no_of_programs, lat, lng } =
-    req.body;
+    req.body
   const required = {
     department_name,
     department_abbreviation,
     no_of_programs,
     lat,
     lng,
-  };
+  }
 
   for (let val in required) {
     if (!required[val]) {
-      const error = new HttpError(`${val} is required!`, 404, `${val}`);
-      return next(error);
+      return res.status(404).send({ message: `${val} is required!`, type: val })
     }
   }
 
@@ -27,20 +25,20 @@ const registerDepartment = async (req, res, next) => {
       lat,
       lng,
     },
-  });
+  })
 
   try {
-    await department.save();
+    await department.save()
     res.send({
       statusCode: 202,
       message: 'Successfully Registered',
-    });
+    })
   } catch (e) {
-    const error = new HttpError('Something went wrong', 500, 'department');
-    return next(error);
+    return res.status(500).send('Something went wrong')
+    // return next(error)
   }
-};
+}
 
 module.exports = {
   registerDepartment,
-};
+}

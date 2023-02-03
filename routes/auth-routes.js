@@ -1,17 +1,18 @@
-const express = require('express');
+const express = require('express')
 
 const {
   registerStudent,
   login,
-  checkAuth,
-} = require('../controllers/auth-controller');
+  getUser,
+} = require('../controllers/auth-controller')
+const isAuth = require('../middleware/isAuth')
 
-const router = express.Router();
+const router = express.Router()
 
-router.route('/api/student/register').post(registerStudent);
+router.route('/api/student/register').post(registerStudent)
 
-router.route('/api/login').post(login);
+router.route('/api/login').post(login)
 
-router.route('/is-logged-in').get(checkAuth);
+router.route('/api/get-user').get(isAuth, getUser)
 
-module.exports = router;
+module.exports = router
