@@ -29,13 +29,14 @@ const registerDepartment = async (req, res, next) => {
 
   try {
     await department.save()
-    res.send({
-      statusCode: 202,
+    res.status(202).send({
       message: 'Successfully Registered',
+      type: 'department',
     })
   } catch (e) {
-    return res.status(500).send('Something went wrong')
-    // return next(error)
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'department' })
   }
 }
 

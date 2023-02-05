@@ -12,7 +12,6 @@ const emailRegexp =
 
 const registerStudent = async (req, res, next) => {
   let existingStudent
-  let token
   let avatar
 
   const {
@@ -106,6 +105,7 @@ const registerStudent = async (req, res, next) => {
 
       res.status(202).send({
         token,
+        type: 'register',
       })
     } catch (err) {
       console.error('While Saving User', err)
@@ -126,23 +126,22 @@ const login = async (req, res, next) => {
   const { email, password } = req.body
   try {
     const foundUser = await Student.findOne({ email: email })
-    if (foundUser) {
-      bcrypt.compare(password, foundUser.password, async (e, result) => {
-        if (result) {
-          const token = genToken(foundUser)
-          res.status(202).send({
-            token,
-          })
-        } else {
-          console.error(e)
-          return res
-            .status(404)
-            .send({ message: "Passwords Don't Match", type: 'password' })
-        }
-      })
-    } else {
+    if (!foundUser)
       return res.status(404).send({ message: 'Invalid Email', type: 'email' })
-    }
+    bcrypt.compare(password, foundUser.password, async (e, result) => {
+      if (result) {
+        const token = genToken(foundUser)
+        res.status(202).send({
+          token,
+          type: 'login',
+        })
+      } else {
+        console.error(e)
+        return res
+          .status(404)
+          .send({ message: "Passwords Don't Match", type: 'password' })
+      }
+    })
   } catch (err) {
     console.error(err)
     return res

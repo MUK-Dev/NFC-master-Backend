@@ -1,32 +1,32 @@
-const Model = require('../models/program-model');
-const HttpError = require('../utils/HttpError');
+const Model = require('../models/program-model')
+const HttpError = require('../utils/HttpError')
 
 const registerProgram = async (req, res, next) => {
-  const { program_title, type, starting, ending, department } = req.body;
-  const required = { program_title, type, starting, ending, department };
+  const { program_title, type, starting, ending, department } = req.body
+  const required = { program_title, type, starting, ending, department }
 
   for (let val in required) {
     if (!required[val]) {
-      const error = new HttpError(`${val} is required!`, 404, `${val}`);
-      return next(error);
+      return res.status(404).send({ message: `${val} is required!`, type: val })
     }
   }
 
-  const program = Model({ program_title, type, starting, ending, department });
+  const program = Model({ program_title, type, starting, ending, department })
 
   try {
-    await program.save();
-    res.send({
-      statusCode: 202,
+    await program.save()
+    res.status(202).send({
       message: 'Successfully Registered',
-    });
+      type: 'program',
+    })
   } catch (e) {
-    console.error(e);
-    const error = new HttpError('Something went wrong', 500, 'program');
-    return next(error);
+    console.error(e)
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'program' })
   }
-};
+}
 
 module.exports = {
   registerProgram,
-};
+}

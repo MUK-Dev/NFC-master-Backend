@@ -1,5 +1,5 @@
-const Model = require('../models/semester-model');
-const HttpError = require('../utils/HttpError');
+const Model = require('../models/semester-model')
+const HttpError = require('../utils/HttpError')
 
 const registerSemester = async (req, res, next) => {
   const {
@@ -10,7 +10,7 @@ const registerSemester = async (req, res, next) => {
     department,
     program,
     session,
-  } = req.body;
+  } = req.body
   const required = {
     semester_title,
     type,
@@ -19,12 +19,11 @@ const registerSemester = async (req, res, next) => {
     department,
     program,
     session,
-  };
+  }
 
   for (let val in required) {
     if (!required[val]) {
-      const error = new HttpError(`${val} is required!`, 404, `${val}`);
-      return next(error);
+      return res.status(404).send({ message: `${val} is required!`, type: val })
     }
   }
 
@@ -36,21 +35,22 @@ const registerSemester = async (req, res, next) => {
     department,
     program,
     session,
-  });
+  })
 
   try {
-    await semester.save();
-    res.send({
-      statusCode: 202,
+    await semester.save()
+    res.status(202).send({
       message: 'Successfully Registered',
-    });
+      type: 'semester',
+    })
   } catch (e) {
-    console.error(e);
-    const error = new HttpError('Something went wrong', 500, 'session');
-    return next(error);
+    console.error(e)
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'session' })
   }
-};
+}
 
 module.exports = {
   registerSemester,
-};
+}
