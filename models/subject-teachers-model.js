@@ -10,7 +10,7 @@ const subjectSchema = mongoose.Schema(
     semester: { type: mongoose.Schema.Types.ObjectId, ref: 'Semester' },
     change_history: [],
   },
-  { timestamps: true }
+  { timestamps: true },
 )
 
 module.exports = mongoose.model('SubjectTeachers', subjectSchema)

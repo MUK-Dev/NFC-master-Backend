@@ -1,7 +1,7 @@
 class RouteMessage {
   constructor(method, route) {
-    console.log(`${method} Route Active on: ${route}`);
+    console.log(`${method} Route Active on: ${route}`)
   }
 }
 
-module.exports = RouteMessage;
+module.exports = RouteMessage

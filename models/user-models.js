@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const studentSchema = mongoose.Schema(
   {
@@ -14,8 +14,8 @@ const studentSchema = mongoose.Schema(
     avatar: String,
     role: String,
   },
-  { timestamps: true }
-);
+  { timestamps: true },
+)
 
 const parentSchema = mongoose.Schema(
   {
@@ -25,10 +25,10 @@ const parentSchema = mongoose.Schema(
     password: String,
     avatar: String,
   },
-  { timestamps: true }
-);
+  { timestamps: true },
+)
 
 module.exports = {
   Student: mongoose.model('Student', studentSchema),
   Parent: mongoose.model('Parent', parentSchema),
-};
+}

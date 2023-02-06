@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const sessionSchema = mongoose.Schema(
   {
@@ -10,7 +10,7 @@ const sessionSchema = mongoose.Schema(
     program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
     change_history: [],
   },
-  { timestamps: true }
-);
+  { timestamps: true },
+)
 
-module.exports = mongoose.model('Session', sessionSchema);
+module.exports = mongoose.model('Session', sessionSchema)

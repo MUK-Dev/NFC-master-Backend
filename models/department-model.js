@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const departmentSchema = mongoose.Schema(
   {
@@ -11,7 +11,7 @@ const departmentSchema = mongoose.Schema(
     },
     change_history: [],
   },
-  { timestamps: true }
-);
+  { timestamps: true },
+)
 
-module.exports = mongoose.model('Department', departmentSchema);
+module.exports = mongoose.model('Department', departmentSchema)

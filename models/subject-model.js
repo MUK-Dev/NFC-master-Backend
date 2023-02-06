@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const subjectSchema = mongoose.Schema(
   {
@@ -13,7 +13,7 @@ const subjectSchema = mongoose.Schema(
     semester: { type: mongoose.Schema.Types.ObjectId, ref: 'Semester' },
     change_history: [],
   },
-  { timestamps: true }
-);
+  { timestamps: true },
+)
 
-module.exports = mongoose.model('Subject', subjectSchema);
+module.exports = mongoose.model('Subject', subjectSchema)

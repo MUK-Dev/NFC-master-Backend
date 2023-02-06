@@ -156,7 +156,7 @@ const login = async (req, res, next) => {
 const getUser = async (req, res, next) => {
   try {
     const user = await Student.findById(req.userInfo.tokenUser.id).select(
-      '-password'
+      '-password',
     )
     return res.status(200).send(user)
   } catch (err) {

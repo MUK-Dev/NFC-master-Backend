@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const semesterSchema = mongoose.Schema(
   {
@@ -11,7 +11,7 @@ const semesterSchema = mongoose.Schema(
     session: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },
     change_history: [],
   },
-  { timestamps: true }
-);
+  { timestamps: true },
+)
 
-module.exports = mongoose.model('Semester', semesterSchema);
+module.exports = mongoose.model('Semester', semesterSchema)
