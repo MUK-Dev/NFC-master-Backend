@@ -27,6 +27,18 @@ const registerProgram = async (req, res, next) => {
   }
 }
 
+const getAllPrograms = async (req, res, next) => {
+  try {
+    const data = await Model.find().populate('department')
+    res.status(200).send(data)
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'programs' })
+  }
+}
+
 module.exports = {
   registerProgram,
+  getAllPrograms,
 }

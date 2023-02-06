@@ -54,14 +54,13 @@ class ExpressApp {
     new RouteMessage('POST', '/api/student/register')
     new RouteMessage('POST', '/api/login')
     new RouteMessage('GET', '/api/is-logged-in')
-    // new RouteMessage('GET', '/api/departments');
-    new RouteMessage('POST', '/api/departments')
-    new RouteMessage('POST', '/api/programs')
-    new RouteMessage('POST', '/api/sessions')
-    new RouteMessage('POST', '/api/semesters')
-    new RouteMessage('POST', '/api/subjects')
-    new RouteMessage('POST', '/api/subject-students')
-    new RouteMessage('POST', '/api/subject-teachers')
+    new RouteMessage('GET, POST', '/api/departments')
+    new RouteMessage('GET, POST', '/api/programs')
+    new RouteMessage('GET, POST', '/api/sessions')
+    new RouteMessage('GET, POST', '/api/semesters')
+    new RouteMessage('GET, POST', '/api/subjects')
+    new RouteMessage('GET, POST', '/api/subject-students')
+    new RouteMessage('GET, POST', '/api/subject-teachers')
   }
 
   runApp() {

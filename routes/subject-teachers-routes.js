@@ -1,11 +1,16 @@
-const express = require('express');
+const express = require('express')
 
 const {
   registerSubjectTeachers,
-} = require('../controllers/subject-teachers-controller');
+  getAllSubjectTeachers,
+} = require('../controllers/subject-teachers-controller')
+const isAuth = require('../middleware/isAuth')
 
-const router = express.Router();
+const router = express.Router()
 
-router.route('/api/subject-teachers').get().post(registerSubjectTeachers);
+router
+  .route('/api/subject-teachers')
+  .get(isAuth, getAllSubjectTeachers)
+  .post(isAuth, registerSubjectTeachers)
 
-module.exports = router;
+module.exports = router

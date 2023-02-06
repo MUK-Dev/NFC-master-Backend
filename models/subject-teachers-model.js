@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const subjectSchema = mongoose.Schema(
   {
-    teachers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
+    teachers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Teachers' }],
     department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
     program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
     session: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },
@@ -11,6 +11,6 @@ const subjectSchema = mongoose.Schema(
     change_history: [],
   },
   { timestamps: true }
-);
+)
 
-module.exports = mongoose.model('SubjectTeachers', subjectSchema);
+module.exports = mongoose.model('SubjectTeachers', subjectSchema)

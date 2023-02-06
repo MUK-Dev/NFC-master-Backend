@@ -1,9 +1,16 @@
-const express = require('express');
+const express = require('express')
 
-const { registerSubject } = require('../controllers/subject-controller');
+const {
+  registerSubject,
+  getAllSubjects,
+} = require('../controllers/subject-controller')
+const isAuth = require('../middleware/isAuth')
 
-const router = express.Router();
+const router = express.Router()
 
-router.route('/api/subjects').get().post(registerSubject);
+router
+  .route('/api/subjects')
+  .get(isAuth, getAllSubjects)
+  .post(isAuth, registerSubject)
 
-module.exports = router;
+module.exports = router

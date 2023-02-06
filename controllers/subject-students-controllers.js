@@ -41,6 +41,24 @@ const registerSubjectStudents = async (req, res, next) => {
   }
 }
 
+const getAllSubjectStudents = async (req, res, next) => {
+  try {
+    const data = await Model.find().populate([
+      'department',
+      'program',
+      'session',
+      'semester',
+      'subject',
+    ])
+    res.status(200).send(data)
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'subject-students' })
+  }
+}
+
 module.exports = {
   registerSubjectStudents,
+  getAllSubjectStudents,
 }

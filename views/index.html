@@ -169,7 +169,6 @@
           <code>
               {
                 "message": String,
-                "statusCode": Number,
                 "type": String
               }
         </code>
@@ -178,6 +177,32 @@
     </details>
     <hr />
     <h2>DEPARTMENTS</h2>
+    <details>
+      <summary class="get">GET <code>/api/departments</code></summary>
+      <div>
+        <p>Get all registered departments</p>
+        <h4>Request</h4>
+        <pre>
+          <code> 
+          Authorization: Bearer {token}
+        </code>
+      </pre>
+        <h4>Response</h4>
+        <pre>
+          <code>
+              [
+                {
+                  "_id": String,
+                  "department_name": String,
+                  "department_abbreviation": String,
+                  "no_of_programs": Number,
+                  "change_history": [],
+                }
+              ]
+        </code>
+      </pre>
+      </div>
+    </details>
     <details>
       <summary class="post">POST <code>/api/departments</code></summary>
       <div>
@@ -209,6 +234,34 @@
     <hr />
     <h2>PROGRAMS</h2>
     <details>
+      <summary class="get">GET <code>/api/programs</code></summary>
+      <div>
+        <p>Get all registered programs</p>
+        <h4>Request</h4>
+        <pre>
+          <code> 
+          Authorization: Bearer {token}
+        </code>
+      </pre>
+        <h4>Response</h4>
+        <pre>
+          <code>
+              [
+                {
+                  "_id": String,
+                  "program_title": String,
+                  "type": String,
+                  "starting": Date,
+                  "ending": Date,
+                  "department": Department,
+                  "change_history": [],
+                }
+              ]
+        </code>
+      </pre>
+      </div>
+    </details>
+    <details>
       <summary class="post">POST <code>/api/programs</code></summary>
       <div>
         <p>Register New Program</p>
@@ -238,6 +291,35 @@
     </details>
     <hr />
     <h2>SESSIONS</h2>
+    <details>
+      <summary class="get">GET <code>/api/sessions</code></summary>
+      <div>
+        <p>Get all registered sessions</p>
+        <h4>Request</h4>
+        <pre>
+          <code> 
+          Authorization: Bearer {token}
+        </code>
+      </pre>
+        <h4>Response</h4>
+        <pre>
+          <code>
+              [
+                {
+                  "_id": String,
+                  "session_title": String,
+                  "type": String,
+                  "starting_year": Date,
+                  "ending_year": Date,
+                  "department": Department,
+                  "program": Program,
+                  "change_history": [],
+                }
+              ]
+        </code>
+      </pre>
+      </div>
+    </details>
     <details>
       <summary class="post">POST <code>/api/sessions</code></summary>
       <div>
@@ -270,6 +352,36 @@
     <hr />
     <h2>SEMESTERS</h2>
     <details>
+      <summary class="get">GET <code>/api/semesters</code></summary>
+      <div>
+        <p>Get all registered semesters</p>
+        <h4>Request</h4>
+        <pre>
+          <code> 
+          Authorization: Bearer {token}
+        </code>
+      </pre>
+        <h4>Response</h4>
+        <pre>
+          <code>
+              [
+                {
+                  "_id": String,
+                  "semester_title": String,
+                  "type": String,
+                  "starting_year": Date,
+                  "ending_year": Date,
+                  "department": Department,
+                  "program": Program,
+                  "session": Session,
+                  "change_history": [],
+                }
+              ]
+        </code>
+      </pre>
+      </div>
+    </details>
+    <details>
       <summary class="post">POST <code>/api/semesters</code></summary>
       <div>
         <p>Register New Semester</p>
@@ -301,6 +413,38 @@
     </details>
     <hr />
     <h2>SUBJECT</h2>
+    <details>
+      <summary class="get">GET <code>/api/subjects</code></summary>
+      <div>
+        <p>Get all registered subjects</p>
+        <h4>Request</h4>
+        <pre>
+          <code> 
+          Authorization: Bearer {token}
+        </code>
+      </pre>
+        <h4>Response</h4>
+        <pre>
+          <code>
+              [
+                {
+                  "_id": String,
+                  "subject_title": String,
+                  "type": String,
+                  "subject_code": String,
+                  "theory_hours": Number,
+                  "lab_hours": Number,
+                  "department": Department,
+                  "program": Program,
+                  "session": Session,
+                  "semester": Semester,
+                  "change_history": [],
+                }
+              ]
+        </code>
+      </pre>
+      </div>
+    </details>
     <details>
       <summary class="post">POST <code>/api/subjects</code></summary>
       <div>
@@ -335,6 +479,38 @@
     </details>
     <hr />
     <h2>SUBJECT STUDENTS</h2>
+    <details>
+      <summary class="get">GET <code>/api/subjects</code></summary>
+      <div>
+        <p>Get all students registered in a subject</p>
+        <h4>Request</h4>
+        <pre>
+          <code> 
+          Authorization: Bearer {token}
+        </code>
+      </pre>
+        <h4>Response</h4>
+        <pre>
+          <code>
+              [
+                {
+                  "_id": String,
+                  "subject_title": String,
+                  "type": String,
+                  "subject_code": String,
+                  "theory_hours": Number,
+                  "lab_hours": Number,
+                  "department": Department,
+                  "program": Program,
+                  "session": Session,
+                  "semester": Semester,
+                  "change_history": [],
+                }
+              ]
+        </code>
+      </pre>
+      </div>
+    </details>
     <details>
       <summary class="post">POST <code>/api/subject-students</code></summary>
       <div>

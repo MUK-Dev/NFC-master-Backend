@@ -1,9 +1,16 @@
-const express = require('express');
+const express = require('express')
 
-const { registerSession } = require('../controllers/session-controller');
+const {
+  registerSession,
+  getAllSessions,
+} = require('../controllers/session-controller')
+const isAuth = require('../middleware/isAuth')
 
-const router = express.Router();
+const router = express.Router()
 
-router.route('/api/sessions').get().post(registerSession);
+router
+  .route('/api/sessions')
+  .get(isAuth, getAllSessions)
+  .post(isAuth, registerSession)
 
-module.exports = router;
+module.exports = router

@@ -40,6 +40,18 @@ const registerDepartment = async (req, res, next) => {
   }
 }
 
+const getAllDepartments = async (req, res, next) => {
+  try {
+    const data = await Model.find()
+    res.status(200).send(data)
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'departments' })
+  }
+}
+
 module.exports = {
   registerDepartment,
+  getAllDepartments,
 }
