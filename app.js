@@ -11,6 +11,8 @@ const semesterRoutes = require('./routes/semester-routes')
 const subjectRoutes = require('./routes/subject-routes')
 const subjectStudentsRoutes = require('./routes/subject-students-routes')
 const subjectTeachersRoutes = require('./routes/subject-teachers-routes')
+const studentRoutes = require('./routes/student-routes')
+
 const RouteMessage = require('./utils/RouteMessage')
 
 class ExpressApp {
@@ -23,6 +25,9 @@ class ExpressApp {
   registerRoutes() {
     //? === Authentication ===
     this.app.use(authRoutes)
+
+    //? === Students ===
+    this.app.use(studentRoutes)
 
     //? === Department ===
     this.app.use(departmentRoutes)
@@ -61,6 +66,7 @@ class ExpressApp {
     new RouteMessage('GET, POST', '/api/subjects')
     new RouteMessage('GET, POST', '/api/subject-students')
     new RouteMessage('GET, POST', '/api/subject-teachers')
+    new RouteMessage('GET ', '/api/students/search')
   }
 
   runApp() {
