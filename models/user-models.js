@@ -1,5 +1,77 @@
 const mongoose = require('mongoose')
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *    StudentResponse:
+ *      type: object
+ *      properties:
+ *        _id:
+ *          type: string
+ *        name:
+ *          type: string
+ *        email:
+ *          type: string
+ *        section:
+ *          type: string
+ *        session:
+ *          type: string
+ *        program:
+ *          type: string
+ *        rollNo:
+ *          type: string
+ *        phoneNo:
+ *          type: string
+ *        gender:
+ *          type: string
+ *        avatar:
+ *          type: string
+ *        role:
+ *          type: string
+ *        createdAt:
+ *          type: string
+ *        updatedAt:
+ *          type: string
+ *    LoginResponse:
+ *      type: object
+ *      properties:
+ *        token:
+ *          type: string
+ *        type:
+ *          type: string
+ *    LoginRequest:
+ *      type: object
+ *      properties:
+ *        email:
+ *          type: string
+ *        password:
+ *          type: string
+ *    RegisterRequest:
+ *      type: object
+ *      properties:
+ *        name:
+ *          type: string
+ *        email:
+ *          type: string
+ *        section:
+ *          type: string
+ *        session:
+ *          type: string
+ *        program:
+ *          type: string
+ *        rollNo:
+ *          type: string
+ *        gender:
+ *          type: string
+ *        phoneNo:
+ *          type: string
+ *        password:
+ *          type: string
+ *        role:
+ *          type: string
+ */
+
 const studentSchema = mongoose.Schema(
   {
     name: String,

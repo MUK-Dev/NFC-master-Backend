@@ -176,6 +176,92 @@
       </div>
     </details>
     <hr />
+    <h2>AUTHENTICATION</h2>
+    <details>
+      <summary class="post">POST <code>/api/register/student</code></summary>
+      <div>
+        <p>Register New Department</p>
+        <h4>Request</h4>
+        <pre>
+          <code> 
+          {
+            "department_name": String,
+            "department_abbreviation": String,
+            "no_of_programs": Number,
+            "lat": Number,
+            "lng": Number
+          }
+          Authorization: Bearer {token}
+        </code>
+      </pre>
+        <h4>Response</h4>
+        <pre>
+          <code>
+            {
+              "statusCode": Number,
+              "message": String
+            }
+        </code>
+      </pre>
+      </div>
+    </details>
+    <details>
+      <summary class="post">POST <code>/api/departments</code></summary>
+      <div>
+        <p>Register New Department</p>
+        <h4>Request</h4>
+        <pre>
+          <code> 
+          {
+            "department_name": String,
+            "department_abbreviation": String,
+            "no_of_programs": Number,
+            "lat": Number,
+            "lng": Number
+          }
+          Authorization: Bearer {token}
+        </code>
+      </pre>
+        <h4>Response</h4>
+        <pre>
+          <code>
+            {
+              "statusCode": Number,
+              "message": String
+            }
+        </code>
+      </pre>
+      </div>
+    </details>
+    <details>
+      <summary class="get">GET <code>/api/programs</code></summary>
+      <div>
+        <p>Get all registered programs</p>
+        <h4>Request</h4>
+        <pre>
+          <code> 
+          Authorization: Bearer {token}
+        </code>
+      </pre>
+        <h4>Response</h4>
+        <pre>
+          <code>
+              [
+                {
+                  "_id": String,
+                  "program_title": String,
+                  "type": String,
+                  "starting": Date,
+                  "ending": Date,
+                  "department": Department,
+                  "change_history": [],
+                }
+              ]
+        </code>
+      </pre>
+      </div>
+    </details>
+    <hr />
     <h2>DEPARTMENTS</h2>
     <details>
       <summary class="get">GET <code>/api/departments</code></summary>

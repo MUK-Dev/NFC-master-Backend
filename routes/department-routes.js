@@ -6,6 +6,49 @@ const {
 } = require('../controllers/department-controller')
 const isAuth = require('../middleware/isAuth')
 
+/**
+ * @openapi
+ * /api/departments:
+ *  get:
+ *     tags:
+ *     - Departments
+ *     description: Returns all registered departments
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/AllDepartmentResponse'
+ *       401:
+ *        description: Unauthorized
+ *       404:
+ *        description: Invalid request
+ *       500:
+ *        description: Something went wrong (Server error)
+ *  post:
+ *     tags:
+ *     - Departments
+ *     description: Registers new department
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schemas/RegisterDepartmentRequest'
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/LoginResponse'
+ *       404:
+ *        description: Invalid request
+ *       500:
+ *        description: Something went wrong (Server error)
+ */
+
 const router = express.Router()
 
 router
@@ -14,13 +57,3 @@ router
   .post(isAuth, registerDepartment)
 
 module.exports = router
-
-/*
-MVC Pattern:
-
-Model: Schema of data
-
-View: Presentation of data
-
-Controller: Functionality
-*/

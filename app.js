@@ -12,6 +12,7 @@ const subjectRoutes = require('./routes/subject-routes')
 const subjectStudentsRoutes = require('./routes/subject-students-routes')
 const subjectTeachersRoutes = require('./routes/subject-teachers-routes')
 const RouteMessage = require('./utils/RouteMessage')
+const swaggerDocs = require('./utils/swagger')
 
 class ExpressApp {
   constructor() {
@@ -46,14 +47,14 @@ class ExpressApp {
     this.app.use(subjectTeachersRoutes)
 
     //?=== API Instruction Page ===
-    this.app.get('/', (req, res) =>
-      res.sendFile(__dirname + '/views/index.html'),
-    )
+    // this.app.get('/', (req, res) =>
+    //   res.sendFile(__dirname + '/views/index.html'),
+    // )
 
     new RouteMessage('GET', '/')
     new RouteMessage('POST', '/api/student/register')
     new RouteMessage('POST', '/api/login')
-    new RouteMessage('GET', '/api/is-logged-in')
+    new RouteMessage('GET', '/api/get-user')
     new RouteMessage('GET, POST', '/api/departments')
     new RouteMessage('GET, POST', '/api/programs')
     new RouteMessage('GET, POST', '/api/sessions')
@@ -64,7 +65,6 @@ class ExpressApp {
   }
 
   runApp() {
-    this.registerRoutes()
     //? === Database Connection ===
     mongoose
       .connect(process.env.MONGODB_KEY)
@@ -72,7 +72,11 @@ class ExpressApp {
         let port
         if (process.env.PORT) port = process.env.PORT
         else port = 6000
-        this.app.listen(port, () => console.log(`Running On Port: ${port}`))
+        this.app.listen(port, () => {
+          this.registerRoutes()
+          swaggerDocs(this.app, port)
+          console.log(`Running On Port: ${port}`)
+        })
       })
       .catch(err => console.error(err))
 

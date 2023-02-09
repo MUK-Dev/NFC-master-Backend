@@ -139,7 +139,7 @@ const login = async (req, res, next) => {
         console.error(e)
         return res
           .status(404)
-          .send({ message: "Passwords Don't Match", type: 'password' })
+          .send({ message: 'Invalid Password', type: 'password' })
       }
     })
   } catch (err) {
