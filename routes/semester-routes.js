@@ -6,6 +6,49 @@ const {
 } = require('../controllers/semester-controller')
 const isAuth = require('../middleware/isAuth')
 
+/**
+ * @openapi
+ * /api/semesters:
+ *  get:
+ *     tags:
+ *     - Semesters
+ *     description: Returns all registered semesters
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/AllSemestersResponse'
+ *       401:
+ *        description: Unauthorized
+ *       404:
+ *        description: Invalid request
+ *       500:
+ *        description: Something went wrong (Server error)
+ *  post:
+ *     tags:
+ *     - Semesters
+ *     description: Registers new Semester
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schemas/RegisterSemesterRequest'
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/RegisterSemesterResponse'
+ *       404:
+ *        description: Invalid request
+ *       500:
+ *        description: Something went wrong (Server error)
+ */
+
 const router = express.Router()
 
 router

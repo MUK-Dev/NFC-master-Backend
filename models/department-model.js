@@ -7,25 +7,22 @@ const mongoose = require('mongoose')
  *    RegisterDepartmentRequest:
  *      type: object
  *      properties:
- *        name:
+ *        department_name:
  *          type: string
- *        email:
+ *        department_abbreviation:
  *          type: string
- *        section:
+ *        no_of_programs:
  *          type: string
- *        session:
+ *        lat:
+ *          type: number
+ *        lng:
+ *          type: number
+ *    RegisterDepartmentResponse:
+ *      type: object
+ *      properties:
+ *        message:
  *          type: string
- *        program:
- *          type: string
- *        rollNo:
- *          type: string
- *        gender:
- *          type: string
- *        phoneNo:
- *          type: string
- *        password:
- *          type: string
- *        role:
+ *        type:
  *          type: string
  *    AllDepartmentResponse:
  *      type: array
@@ -34,26 +31,29 @@ const mongoose = require('mongoose')
  *    Department:
  *      type: object
  *      properties:
- *        name:
+ *        location:
+ *          type: object
+ *          properties:
+ *            lat:
+ *              type: number
+ *            lng:
+ *              type: number
+ *        _id:
  *          type: string
- *        email:
+ *        department_name:
  *          type: string
- *        section:
+ *        department_abbreviation:
  *          type: string
- *        session:
+ *        no_of_programs:
+ *          type: number
+ *        change_history:
+ *          type: array
+ *        createdAt:
  *          type: string
- *        program:
+ *          format: date-time
+ *        updatedAt:
  *          type: string
- *        rollNo:
- *          type: string
- *        gender:
- *          type: string
- *        phoneNo:
- *          type: string
- *        password:
- *          type: string
- *        role:
- *          type: string
+ *          format: date-time
  */
 
 const departmentSchema = mongoose.Schema(

@@ -42,7 +42,7 @@ const isAuth = require('../middleware/isAuth')
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/LoginResponse'
+ *              $ref: '#/components/schemas/RegisterDepartmentResponse'
  *       404:
  *        description: Invalid request
  *       500:
