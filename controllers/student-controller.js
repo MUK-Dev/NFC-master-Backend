@@ -11,6 +11,19 @@ const findStudents = async (req, res, next) => {
   }
 }
 
+const getAllStudents = async (req, res, next) => {
+  try {
+    const data = await Student.find().select('-password')
+    res.send(data)
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'get-all-students' })
+  }
+}
+
 module.exports = {
   findStudents,
+  getAllStudents,
 }
