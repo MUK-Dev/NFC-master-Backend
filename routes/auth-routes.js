@@ -4,6 +4,7 @@ const {
   registerStudent,
   login,
   getUser,
+  registerParent,
 } = require('../controllers/auth-controller')
 const isAuth = require('../middleware/isAuth')
 
@@ -44,7 +45,7 @@ const isAuth = require('../middleware/isAuth')
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/LoginResponse'
+ *              $ref: '#/components/schemas/TokenResponse'
  *       404:
  *        description: Invalid request
  *       500:
@@ -53,20 +54,44 @@ const isAuth = require('../middleware/isAuth')
  *  post:
  *     tags:
  *     - Authentication
- *     description: Registers user and returns token
+ *     description: Registers student and returns token
  *     requestBody:
  *      required: true
  *      content:
  *        application/json:
  *           schema:
- *              $ref: '#/components/schemas/RegisterRequest'
+ *              $ref: '#/components/schemas/RegisterStudentRequest'
  *     responses:
  *       200:
  *        description: Success
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/LoginResponse'
+ *              $ref: '#/components/schemas/TokenResponse'
+ *       404:
+ *        description: Invalid request
+ *       403:
+ *        description: Email already in use
+ *       500:
+ *        description: Something went wrong (Server error)
+ * /api/parent/register:
+ *  post:
+ *     tags:
+ *     - Authentication
+ *     description: Registers parent and returns token
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schemas/RegisterParentRequest'
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/TokenResponse'
  *       404:
  *        description: Invalid request
  *       403:
@@ -78,6 +103,8 @@ const isAuth = require('../middleware/isAuth')
 const router = express.Router()
 
 router.route('/api/student/register').post(registerStudent)
+
+router.route('/api/parent/register').post(registerParent)
 
 router.route('/api/login').post(login)
 

@@ -14,7 +14,8 @@ const findStudents = async (req, res, next) => {
 const getAllStudents = async (req, res, next) => {
   try {
     const data = await Student.find().select('-password')
-    res.send(data)
+
+    return res.send(data)
   } catch (err) {
     console.log(err)
     return res

@@ -1,18 +1,17 @@
 const bcrypt = require('bcrypt')
-const crypto = require('crypto')
 
-const { Student } = require('../models/user-models')
-const HttpError = require('../utils/HttpError')
+const { Student, Parent } = require('../models/user-models')
 const { genToken } = require('../utils/generate-token')
+const createAvatarHash = require('../utils/createAvatarHash')
 
 const emailRegexp =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
 //? === Register Student ===
 
-const registerStudent = async (req, res, next) => {
-  let existingStudent
+const registerStudent = async (req, res) => {
   let avatar
+  let existingStudent
 
   const {
     name,
@@ -38,10 +37,7 @@ const registerStudent = async (req, res, next) => {
     phoneNo,
   })
 
-  const avatarHash = crypto
-    .createHash('md5')
-    .update(email?.toLowerCase())
-    .digest('hex')
+  const avatarHash = createAvatarHash(email)
 
   if (gender)
     avatar = `https://avatars.dicebear.com/api/${gender}/:${avatarHash}.svg`
@@ -77,18 +73,11 @@ const registerStudent = async (req, res, next) => {
   //!-------------------------------------------------------
 
   // !Creating New Student
-  const saltRounds = await bcrypt.genSalt(10)
-  bcrypt.hash(password, saltRounds, async (e, hash) => {
-    if (e) {
-      console.error('Bcrypt: While hashing', e)
-      return res
-        .status(500)
-        .send({ message: 'Something went wrong', type: 'password' })
-    }
+  try {
     const user = Student({
       name,
       email,
-      password: hash,
+      password,
       avatar,
       section,
       session,
@@ -98,23 +87,100 @@ const registerStudent = async (req, res, next) => {
       role: 'Student',
     })
 
-    try {
-      await user.save()
+    await user.save()
 
-      const token = genToken(user)
+    const token = genToken(user)
 
-      res.status(202).send({
-        token,
-        type: 'register',
-      })
-    } catch (err) {
-      console.error('While Saving User', err)
-      return res.status(500).send({
-        message: "Couldn't Register, please try again",
-        type: 'password',
-      })
-    }
+    res.status(202).send({
+      token,
+      type: 'register',
+    })
+  } catch (err) {
+    console.error('While Saving User', err)
+    return res.status(500).send({
+      message: "Couldn't Register, please try again",
+      type: 'password',
+    })
+  }
+  // !-------------------------------------------
+}
+
+//-------------------------------------------------------
+
+//? === Register Parent ===
+
+const registerParent = async (req, res) => {
+  let avatar
+  let existingParent
+
+  const { name, email, password, phoneNo } = req.body
+
+  console.table({
+    name,
+    email,
+    password,
+    phoneNo,
   })
+
+  const avatarHash = createAvatarHash(email)
+
+  avatar = `https://avatars.dicebear.com/api/bottts/:${avatarHash}.svg`
+
+  if (!emailRegexp.test(email)) {
+    return res
+      .status(404)
+      .send({ message: 'Invalid Email Address', type: 'email' })
+  }
+
+  if (password.length < 8) {
+    return res.status(404).send({
+      message: 'Password should be more than 8 Characters',
+      type: 'password',
+    })
+  }
+
+  // ! Checking If Student with same email already exists
+  try {
+    existingParent = await Parent.findOne({ email: email })
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'email' })
+  }
+
+  if (existingParent) {
+    return res
+      .status(403)
+      .send({ message: 'Email already in use', type: 'email' })
+  }
+  //!-------------------------------------------------------
+
+  // !Creating New Student
+  try {
+    const user = Parent({
+      name,
+      email,
+      password,
+      phoneNo,
+      avatar,
+      role: 'Parent',
+    })
+
+    await user.save()
+
+    const token = genToken(user)
+
+    res.status(202).send({
+      token,
+      type: 'register',
+    })
+  } catch (err) {
+    console.error('While Saving User', err)
+    return res.status(500).send({
+      message: "Couldn't Register, please try again",
+      type: 'password',
+    })
+  }
   // !-------------------------------------------
 }
 
@@ -123,9 +189,11 @@ const registerStudent = async (req, res, next) => {
 //? === Login User ===
 
 const login = async (req, res, next) => {
+  let foundUser
   const { email, password } = req.body
   try {
-    const foundUser = await Student.findOne({ email: email })
+    foundUser = await Student.findOne({ email })
+    if (!foundUser) foundUser = await Parent.findOne({ email })
     if (!foundUser)
       return res.status(404).send({ message: 'Invalid Email', type: 'email' })
     bcrypt.compare(password, foundUser.password, async (e, result) => {
@@ -170,5 +238,6 @@ const getUser = async (req, res, next) => {
 module.exports = {
   login,
   registerStudent,
+  registerParent,
   getUser,
 }
