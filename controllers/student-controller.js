@@ -3,7 +3,7 @@ const { Student } = require('../models/user-models')
 const findStudents = async (req, res, next) => {
   const query = new RegExp(req.body.query, 'i')
   try {
-    const data = await Student.find({ name: query })
+    const data = await Student.find({ [req.body.type]: query })
     res.send(data)
   } catch (error) {
     console.log(error)

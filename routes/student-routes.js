@@ -22,6 +22,8 @@ const isAuth = require('../middleware/isAuth')
  *              properties:
  *                query:
  *                  type: string
+ *                type:
+ *                  type: string
  *     responses:
  *       200:
  *        description: Success

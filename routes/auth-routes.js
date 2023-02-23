@@ -5,6 +5,7 @@ const {
   login,
   getUser,
   registerParent,
+  registerAdmin,
 } = require('../controllers/auth-controller')
 const isAuth = require('../middleware/isAuth')
 
@@ -130,7 +131,7 @@ router.route('/api/student/register').post(registerStudent)
 
 router.route('/api/parent/register').post(registerParent)
 
-router.route('/api/admin/register').post(registerParent)
+router.route('/api/admin/register').post(registerAdmin)
 
 router.route('/api/login').post(login)
 

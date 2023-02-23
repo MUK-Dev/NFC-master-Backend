@@ -328,5 +328,6 @@ module.exports = {
   login,
   registerStudent,
   registerParent,
+  registerAdmin,
   getUser,
 }
