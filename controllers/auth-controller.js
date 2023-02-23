@@ -272,7 +272,7 @@ const login = async (req, res, next) => {
     foundUser = await Student.findOne({ email })
     if (!foundUser) foundUser = await Parent.findOne({ email })
     if (!foundUser) foundUser = await Admin.findOne({ email })
-    else if (!foundUser)
+    if (!foundUser)
       return res.status(404).send({ message: 'Invalid Email', type: 'email' })
     bcrypt.compare(password, foundUser.password, async (e, result) => {
       if (result) {
@@ -307,12 +307,13 @@ const getUser = async (req, res, next) => {
       user = await Parent.findById(req.userInfo.tokenUser.id).select(
         '-password',
       )
-    else if (!user)
+    if (!user)
       user = await Admin.findById(req.userInfo.tokenUser.id).select('-password')
-    else if (!user)
+    if (!user)
       return res
         .status(404)
         .send({ message: 'Could not find user', type: 'get-user' })
+    console.log(user)
     return res.status(200).send(user)
   } catch (err) {
     console.log(err)
