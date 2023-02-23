@@ -8,6 +8,31 @@ const isAuth = require('../middleware/isAuth')
 
 /**
  * @openapi
+ * /api/students/search:
+ *  post:
+ *     tags:
+ *     - Students
+ *     description: Searches registered students
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              type: object
+ *              properties:
+ *                query:
+ *                  type: string
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/StudentResponse'
+ *       401:
+ *        description: Unauthorized
+ *       500:
+ *        description: Something went wrong (Server error)
  * /api/students:
  *  get:
  *     tags:
@@ -28,7 +53,7 @@ const isAuth = require('../middleware/isAuth')
 
 const router = express.Router()
 
-router.route('/api/students/search').get(findStudents)
+router.route('/api/students/search').post(isAuth, findStudents)
 
 router.route('/api/students').get(isAuth, getAllStudents)
 

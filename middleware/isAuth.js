@@ -12,7 +12,6 @@ module.exports = (req, res, next) => {
     req.userInfo = decoded
     next()
   } catch (err) {
-    console.log(err)
     return res
       .status(401)
       .send({ message: 'Could not Authenticate', type: 'token' })

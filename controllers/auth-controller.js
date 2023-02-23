@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 
-const { Student, Parent } = require('../models/user-models')
+const { Student, Parent, Admin } = require('../models/user-models')
 const { genToken } = require('../utils/generate-token')
 const createAvatarHash = require('../utils/createAvatarHash')
 
@@ -186,6 +186,83 @@ const registerParent = async (req, res) => {
 
 //-------------------------------------------------------
 
+//? === Register Parent ===
+
+const registerAdmin = async (req, res) => {
+  let avatar
+  let existingAdmin
+
+  const { name, email, password, phoneNo } = req.body
+
+  console.table({
+    name,
+    email,
+    password,
+    phoneNo,
+  })
+
+  const avatarHash = createAvatarHash(email)
+
+  avatar = `https://avatars.dicebear.com/api/bottts/:${avatarHash}.svg`
+
+  if (!emailRegexp.test(email)) {
+    return res
+      .status(404)
+      .send({ message: 'Invalid Email Address', type: 'email' })
+  }
+
+  if (password.length < 8) {
+    return res.status(404).send({
+      message: 'Password should be more than 8 Characters',
+      type: 'password',
+    })
+  }
+
+  // ! Checking If Student with same email already exists
+  try {
+    existingAdmin = await Admin.findOne({ email: email })
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'email' })
+  }
+
+  if (existingAdmin) {
+    return res
+      .status(403)
+      .send({ message: 'Email already in use', type: 'email' })
+  }
+  //!-------------------------------------------------------
+
+  // !Creating New Student
+  try {
+    const user = Admin({
+      name,
+      email,
+      password,
+      phoneNo,
+      avatar,
+      role: 'Admin',
+    })
+
+    await user.save()
+
+    const token = genToken(user)
+
+    res.status(202).send({
+      token,
+      type: 'register',
+    })
+  } catch (err) {
+    console.error('While Saving User', err)
+    return res.status(500).send({
+      message: "Couldn't Register, please try again",
+      type: 'password',
+    })
+  }
+  // !-------------------------------------------
+}
+
 //? === Login User ===
 
 const login = async (req, res, next) => {
@@ -194,7 +271,8 @@ const login = async (req, res, next) => {
   try {
     foundUser = await Student.findOne({ email })
     if (!foundUser) foundUser = await Parent.findOne({ email })
-    if (!foundUser)
+    if (!foundUser) foundUser = await Admin.findOne({ email })
+    else if (!foundUser)
       return res.status(404).send({ message: 'Invalid Email', type: 'email' })
     bcrypt.compare(password, foundUser.password, async (e, result) => {
       if (result) {
@@ -222,14 +300,25 @@ const login = async (req, res, next) => {
 
 //? === Login User ===
 const getUser = async (req, res, next) => {
+  let user
   try {
-    const user = await Student.findById(req.userInfo.tokenUser.id).select(
-      '-password',
-    )
+    user = await Student.findById(req.userInfo.tokenUser.id).select('-password')
+    if (!user)
+      user = await Parent.findById(req.userInfo.tokenUser.id).select(
+        '-password',
+      )
+    else if (!user)
+      user = await Admin.findById(req.userInfo.tokenUser.id).select('-password')
+    else if (!user)
+      return res
+        .status(404)
+        .send({ message: 'Could not find user', type: 'get-user' })
     return res.status(200).send(user)
   } catch (err) {
     console.log(err)
-    return res.status(500).send('Could not find user')
+    return res
+      .status(500)
+      .send({ message: 'Could not find user', type: 'get-user' })
   }
 }
 

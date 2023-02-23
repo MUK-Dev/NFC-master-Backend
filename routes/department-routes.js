@@ -53,7 +53,7 @@ const router = express.Router()
 
 router
   .route('/api/departments')
-  .get(isAuth, getAllDepartments)
+  .get(getAllDepartments)
   .post(isAuth, registerDepartment)
 
 module.exports = router

@@ -118,6 +118,18 @@ const studentSchema = mongoose.Schema(
   { timestamps: true },
 )
 
+const adminSchema = mongoose.Schema(
+  {
+    name: String,
+    email: String,
+    phoneNo: String,
+    password: String,
+    avatar: String,
+    role: String,
+  },
+  { timestamps: true },
+)
+
 const parentSchema = mongoose.Schema(
   {
     name: String,
@@ -129,6 +141,17 @@ const parentSchema = mongoose.Schema(
   },
   { timestamps: true },
 )
+
+adminSchema.pre('save', async function (next) {
+  try {
+    if (!this.isModified('password')) return next()
+    const hashed = await bcrypt.hash(this['password'], 10)
+    this['password'] = hashed
+    return next()
+  } catch (err) {
+    return next(err)
+  }
+})
 
 studentSchema.pre('save', async function (next) {
   try {
@@ -155,4 +178,5 @@ parentSchema.pre('save', async function (next) {
 module.exports = {
   Student: mongoose.model('Student', studentSchema),
   Parent: mongoose.model('Parent', parentSchema),
+  Admin: mongoose.model('Admin', adminSchema),
 }
