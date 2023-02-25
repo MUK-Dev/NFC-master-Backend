@@ -6,6 +6,7 @@ const {
   getUser,
   registerParent,
   registerAdmin,
+  registerTeacher,
 } = require('../controllers/auth-controller')
 const isAuth = require('../middleware/isAuth')
 
@@ -123,6 +124,30 @@ const isAuth = require('../middleware/isAuth')
  *        description: Email already in use
  *       500:
  *        description: Something went wrong (Server error)
+ * /api/teacher/register:
+ *  post:
+ *     tags:
+ *     - Authentication
+ *     description: Registers teacher and returns token
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schemas/RegisterParentRequest'
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/TokenResponse'
+ *       404:
+ *        description: Invalid request
+ *       403:
+ *        description: Email already in use
+ *       500:
+ *        description: Something went wrong (Server error)
  */
 
 const router = express.Router()
@@ -132,6 +157,8 @@ router.route('/api/student/register').post(registerStudent)
 router.route('/api/parent/register').post(registerParent)
 
 router.route('/api/admin/register').post(registerAdmin)
+
+router.route('/api/teacher/register').post(registerTeacher)
 
 router.route('/api/login').post(login)
 

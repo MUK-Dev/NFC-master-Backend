@@ -13,6 +13,7 @@ const subjectStudentsRoutes = require('./routes/subject-students-routes')
 const subjectTeachersRoutes = require('./routes/subject-teachers-routes')
 const studentRoutes = require('./routes/student-routes')
 const parentRoutes = require('./routes/parent-routes')
+const attendanceRoutes = require('./routes/attendance-routes')
 
 const RouteMessage = require('./utils/RouteMessage')
 const swaggerDocs = require('./utils/swagger')
@@ -55,26 +56,12 @@ class ExpressApp {
     //? === Subject Teachers ===
     this.app.use(subjectTeachersRoutes)
 
-    //?=== API Instruction Page ===
-    // this.app.get('/', (req, res) =>
-    //   res.sendFile(__dirname + '/views/index.html'),
-    // )
-
-    new RouteMessage('GET', '/')
-    new RouteMessage('POST', '/api/student/register')
-    new RouteMessage('POST', '/api/login')
-    new RouteMessage('GET', '/api/get-user')
-    new RouteMessage('GET, POST', '/api/departments')
-    new RouteMessage('GET, POST', '/api/programs')
-    new RouteMessage('GET, POST', '/api/sessions')
-    new RouteMessage('GET, POST', '/api/semesters')
-    new RouteMessage('GET, POST', '/api/subjects')
-    new RouteMessage('GET, POST', '/api/subject-students')
-    new RouteMessage('GET, POST', '/api/subject-teachers')
-    new RouteMessage('GET ', '/api/students/search')
+    //? === Attendance Routes ===
+    this.app.use(attendanceRoutes)
   }
 
   runApp() {
+    mongoose.set('strictQuery', false)
     //? === Database Connection ===
     mongoose
       .connect(process.env.MONGODB_KEY)

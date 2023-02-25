@@ -130,6 +130,18 @@ const adminSchema = mongoose.Schema(
   { timestamps: true },
 )
 
+const teacherSchema = mongoose.Schema(
+  {
+    name: String,
+    email: String,
+    phoneNo: String,
+    password: String,
+    avatar: String,
+    role: String,
+  },
+  { timestamps: true },
+)
+
 const parentSchema = mongoose.Schema(
   {
     name: String,
@@ -144,6 +156,27 @@ const parentSchema = mongoose.Schema(
 
 adminSchema.pre('save', async function (next) {
   try {
+    if (!this.isModified('password')) return next()
+    const hashed = await bcrypt.hash(this['password'], 10)
+    this['password'] = hashed
+    return next()
+  } catch (err) {
+    return next(err)
+  }
+})
+
+teacherSchema.pre('save', async function (next) {
+  try {
+    adminSchema.pre('save', async function (next) {
+      try {
+        if (!this.isModified('password')) return next()
+        const hashed = await bcrypt.hash(this['password'], 10)
+        this['password'] = hashed
+        return next()
+      } catch (err) {
+        return next(err)
+      }
+    })
     if (!this.isModified('password')) return next()
     const hashed = await bcrypt.hash(this['password'], 10)
     this['password'] = hashed
@@ -179,4 +212,5 @@ module.exports = {
   Student: mongoose.model('Student', studentSchema),
   Parent: mongoose.model('Parent', parentSchema),
   Admin: mongoose.model('Admin', adminSchema),
+  Teacher: mongoose.model('Teacher', teacherSchema),
 }

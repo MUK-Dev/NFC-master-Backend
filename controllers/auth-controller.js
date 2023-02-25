@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 
-const { Student, Parent, Admin } = require('../models/user-models')
+const { Student, Parent, Admin, Teacher } = require('../models/user-models')
 const { genToken } = require('../utils/generate-token')
 const createAvatarHash = require('../utils/createAvatarHash')
 
@@ -139,7 +139,7 @@ const registerParent = async (req, res) => {
     })
   }
 
-  // ! Checking If Student with same email already exists
+  // ! Checking If Parent with same email already exists
   try {
     existingParent = await Parent.findOne({ email: email })
   } catch (err) {
@@ -155,7 +155,7 @@ const registerParent = async (req, res) => {
   }
   //!-------------------------------------------------------
 
-  // !Creating New Student
+  // !Creating New Parent
   try {
     const user = Parent({
       name,
@@ -186,7 +186,7 @@ const registerParent = async (req, res) => {
 
 //-------------------------------------------------------
 
-//? === Register Parent ===
+//? === Register Admin ===
 
 const registerAdmin = async (req, res) => {
   let avatar
@@ -218,7 +218,7 @@ const registerAdmin = async (req, res) => {
     })
   }
 
-  // ! Checking If Student with same email already exists
+  // ! Checking If Admin with same email already exists
   try {
     existingAdmin = await Admin.findOne({ email: email })
   } catch (err) {
@@ -234,7 +234,7 @@ const registerAdmin = async (req, res) => {
   }
   //!-------------------------------------------------------
 
-  // !Creating New Student
+  // !Creating New Admin
   try {
     const user = Admin({
       name,
@@ -243,6 +243,83 @@ const registerAdmin = async (req, res) => {
       phoneNo,
       avatar,
       role: 'Admin',
+    })
+
+    await user.save()
+
+    const token = genToken(user)
+
+    res.status(202).send({
+      token,
+      type: 'register',
+    })
+  } catch (err) {
+    console.error('While Saving User', err)
+    return res.status(500).send({
+      message: "Couldn't Register, please try again",
+      type: 'password',
+    })
+  }
+  // !-------------------------------------------
+}
+
+//? === Register Admin ===
+
+const registerTeacher = async (req, res) => {
+  let avatar
+  let existingTeacher
+
+  const { name, email, password, phoneNo } = req.body
+
+  console.table({
+    name,
+    email,
+    password,
+    phoneNo,
+  })
+
+  const avatarHash = createAvatarHash(email)
+
+  avatar = `https://avatars.dicebear.com/api/bottts/:${avatarHash}.svg`
+
+  if (!emailRegexp.test(email)) {
+    return res
+      .status(404)
+      .send({ message: 'Invalid Email Address', type: 'email' })
+  }
+
+  if (password.length < 8) {
+    return res.status(404).send({
+      message: 'Password should be more than 8 Characters',
+      type: 'password',
+    })
+  }
+
+  // ! Checking If Admin with same email already exists
+  try {
+    existingTeacher = await Teacher.findOne({ email: email })
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'email' })
+  }
+
+  if (existingTeacher) {
+    return res
+      .status(403)
+      .send({ message: 'Email already in use', type: 'email' })
+  }
+  //!-------------------------------------------------------
+
+  // !Creating New Admin
+  try {
+    const user = Teacher({
+      name,
+      email,
+      password,
+      phoneNo,
+      avatar,
+      role: 'Teacher',
     })
 
     await user.save()
@@ -272,6 +349,7 @@ const login = async (req, res, next) => {
     foundUser = await Student.findOne({ email })
     if (!foundUser) foundUser = await Parent.findOne({ email })
     if (!foundUser) foundUser = await Admin.findOne({ email })
+    if (!foundUser) foundUser = await Teacher.findOne({ email })
     if (!foundUser)
       return res.status(404).send({ message: 'Invalid Email', type: 'email' })
     bcrypt.compare(password, foundUser.password, async (e, result) => {
@@ -310,10 +388,13 @@ const getUser = async (req, res, next) => {
     if (!user)
       user = await Admin.findById(req.userInfo.tokenUser.id).select('-password')
     if (!user)
+      user = await Teacher.findById(req.userInfo.tokenUser.id).select(
+        '-password',
+      )
+    if (!user)
       return res
         .status(404)
         .send({ message: 'Could not find user', type: 'get-user' })
-    console.log(user)
     return res.status(200).send(user)
   } catch (err) {
     console.log(err)
@@ -329,6 +410,7 @@ module.exports = {
   login,
   registerStudent,
   registerParent,
+  registerTeacher,
   registerAdmin,
   getUser,
 }
