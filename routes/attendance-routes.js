@@ -31,6 +31,6 @@ const isAuth = require('../middleware/isAuth')
 
 const router = express.Router()
 
-router.route('/api/attendance/student').post(isAuth, markAttendanceList)
+router.route('/api/attendance/student').post(markAttendanceList)
 
 module.exports = router
