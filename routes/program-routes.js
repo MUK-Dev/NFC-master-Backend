@@ -51,9 +51,6 @@ const isAuth = require('../middleware/isAuth')
 
 const router = express.Router()
 
-router
-  .route('/api/programs')
-  .get(isAuth, getAllPrograms)
-  .post(isAuth, registerProgram)
+router.route('/api/programs').get(getAllPrograms).post(isAuth, registerProgram)
 
 module.exports = router
