@@ -68,7 +68,7 @@ class ExpressApp {
       .then(() => {
         let port
         if (process.env.PORT) port = process.env.PORT
-        else port = 6000
+        else port = 8000
         this.app.listen(port, () => {
           this.registerRoutes()
           swaggerDocs(this.app, port)
