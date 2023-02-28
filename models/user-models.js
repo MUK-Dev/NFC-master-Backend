@@ -99,6 +99,25 @@ const bcrypt = require('bcrypt')
  *          type: string
  *        password:
  *          type: string
+ *    MarksResponse:
+ *      type: array
+ *      items:
+ *        $ref: '#/components/schemas/StudentMarks'
+ *    StudentMarks:
+ *      type: object
+ *      properties:
+ *        _id:
+ *          type: string
+ *        name:
+ *          type: string
+ *        rollNo:
+ *          type: string
+ *        sessional:
+ *          type: string
+ *        mid:
+ *          type: string
+ *        final:
+ *          type: string
  */
 
 const studentSchema = mongoose.Schema(
