@@ -1,5 +1,4 @@
 const Model = require('../models/session-model')
-const HttpError = require('../utils/HttpError')
 
 const registerSession = async (req, res, next) => {
   const {
@@ -55,7 +54,7 @@ const getAllSessions = async (req, res, next) => {
   } catch (err) {
     return res
       .status(500)
-      .send({ message: 'Something went wrong', type: 'departments' })
+      .send({ message: 'Something went wrong', type: 'sessions' })
   }
 }
 

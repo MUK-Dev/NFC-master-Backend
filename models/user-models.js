@@ -35,6 +35,8 @@ const bcrypt = require('bcrypt')
  *          type: string
  *        section:
  *          type: string
+ *        department:
+ *          type: string
  *        session:
  *          type: string
  *        program:
@@ -75,6 +77,8 @@ const bcrypt = require('bcrypt')
  *        email:
  *          type: string
  *        section:
+ *          type: string
+ *        department:
  *          type: string
  *        session:
  *          type: string
@@ -122,11 +126,12 @@ const bcrypt = require('bcrypt')
 
 const studentSchema = mongoose.Schema(
   {
+    department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
+    program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
+    session: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },
+    section: { type: mongoose.Schema.Types.ObjectId, ref: 'Section' },
     name: String,
     email: String,
-    section: String,
-    session: String,
-    program: String,
     rollNo: String,
     gender: String,
     phoneNo: String,

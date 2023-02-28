@@ -2,8 +2,22 @@ const Model = require('../models/program-model')
 const HttpError = require('../utils/HttpError')
 
 const registerProgram = async (req, res, next) => {
-  const { program_title, type, starting, ending, department } = req.body
-  const required = { program_title, type, starting, ending, department }
+  const {
+    program_title,
+    program_abbreviation,
+    type,
+    starting,
+    ending,
+    department,
+  } = req.body
+  const required = {
+    program_title,
+    program_abbreviation,
+    type,
+    starting,
+    ending,
+    department,
+  }
 
   for (let val in required) {
     if (!required[val]) {
@@ -11,7 +25,14 @@ const registerProgram = async (req, res, next) => {
     }
   }
 
-  const program = Model({ program_title, type, starting, ending, department })
+  const program = Model({
+    program_title,
+    program_abbreviation,
+    type,
+    starting,
+    ending,
+    department,
+  })
 
   try {
     await program.save()
@@ -20,7 +41,7 @@ const registerProgram = async (req, res, next) => {
       type: 'program',
     })
   } catch (e) {
-    console.error(e)
+    console.error(e.message)
     return res
       .status(500)
       .send({ message: 'Something went wrong', type: 'program' })

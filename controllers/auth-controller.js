@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt')
 const { Student, Parent, Admin, Teacher } = require('../models/user-models')
 const { genToken } = require('../utils/generate-token')
 const createAvatarHash = require('../utils/createAvatarHash')
+const Program = require('../models/program-model')
+const Section = require('../models/section-model')
+const Session = require('../models/session-model')
 
 const emailRegexp =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
@@ -12,10 +15,10 @@ const emailRegexp =
 const registerStudent = async (req, res) => {
   let avatar
   let existingStudent
+  let email
 
   const {
     name,
-    email,
     password,
     section,
     session,
@@ -23,21 +26,24 @@ const registerStudent = async (req, res) => {
     rollNo,
     gender,
     phoneNo,
+    department,
   } = req.body
 
-  console.table({
-    name,
-    email,
-    password,
-    section,
-    session,
-    program,
-    rollNo,
-    gender,
-    phoneNo,
-  })
+  try {
+    const userProgram = await Program.findById(program)
+    const userSession = await Session.findById(session)
+
+    email = `${userSession.session_title}${userProgram.program_abbreviation}${rollNo}@undergrad.nfciet.edu.pk`
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(500)
+      .send({ type: 'server', message: 'Something went wrong' })
+  }
 
   const avatarHash = createAvatarHash(email)
+
+  console.log(email)
 
   if (gender)
     avatar = `https://avatars.dicebear.com/api/${gender}/:${avatarHash}.svg`
@@ -84,7 +90,21 @@ const registerStudent = async (req, res) => {
       program,
       rollNo,
       phoneNo,
+      department,
       role: 'Student',
+    })
+
+    console.table({
+      name,
+      password,
+      section,
+      session,
+      program,
+      rollNo,
+      gender,
+      phoneNo,
+      department,
+      email,
     })
 
     await user.save()
@@ -94,6 +114,7 @@ const registerStudent = async (req, res) => {
     res.status(202).send({
       token,
       type: 'register',
+      email,
     })
   } catch (err) {
     console.error('While Saving User', err)

@@ -1,25 +1,25 @@
 const express = require('express')
 
 const {
-  registerSemester,
-  getAllSemesters,
-} = require('../controllers/semester-controller')
+  registerSection,
+  getAllSections,
+} = require('../controllers/section-controller')
 const isAuth = require('../middleware/isAuth')
 
 /**
  * @openapi
- * /api/semesters:
+ * /api/sections:
  *  get:
  *     tags:
- *     - Semesters
- *     description: Returns all registered semesters
+ *     - Sections
+ *     description: Returns all registered sections
  *     responses:
  *       200:
  *        description: Success
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/AllSemestersResponse'
+ *              $ref: '#/components/schemas/AllSectionsResponse'
  *       401:
  *        description: Unauthorized
  *       404:
@@ -28,21 +28,21 @@ const isAuth = require('../middleware/isAuth')
  *        description: Something went wrong (Server error)
  *  post:
  *     tags:
- *     - Semesters
- *     description: Registers new Semester
+ *     - Sections
+ *     description: Registers new Section
  *     requestBody:
  *      required: true
  *      content:
  *        application/json:
  *           schema:
- *              $ref: '#/components/schemas/RegisterSemesterRequest'
+ *              $ref: '#/components/schemas/RegisterSectionRequest'
  *     responses:
  *       200:
  *        description: Success
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/RegisterSemesterResponse'
+ *              $ref: '#/components/schemas/RegisterSectionResponse'
  *       404:
  *        description: Invalid request
  *       500:
@@ -51,9 +51,6 @@ const isAuth = require('../middleware/isAuth')
 
 const router = express.Router()
 
-router
-  .route('/api/semesters')
-  .get(getAllSemesters)
-  .post(isAuth, registerSemester)
+router.route('/api/sections').get(getAllSections).post(isAuth, registerSection)
 
 module.exports = router
