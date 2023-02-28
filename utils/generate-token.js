@@ -12,8 +12,7 @@ const genToken = user => {
     })
     return token
   } catch (err) {
-    const error = new HttpError("Couldn't generate token", 500)
-    throw error
+    throw err
   }
 }
 
