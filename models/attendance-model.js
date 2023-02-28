@@ -17,6 +17,21 @@ const mongoose = require('mongoose')
  *          teacher:
  *              type: string
  *              default: Teacher
+ *          department:
+ *              type: string
+ *              default: Department
+ *          program:
+ *              type: string
+ *              default: Program
+ *          session:
+ *              type: string
+ *              default: Session
+ *          semester:
+ *              type: string
+ *              default: Semester
+ *          subject:
+ *              type: string
+ *              default: Subject
  *          list:
  *            type: array
  *            items:
@@ -27,21 +42,40 @@ const mongoose = require('mongoose')
  *        student:
  *          type: string
  *          default: Student
- *        department:
- *          type: string
- *          default: Department
- *        program:
- *          type: number
- *          default: Program
+ *        present:
+ *          type: boolean
  */
 
-const attendanceSchema = mongoose.Schema(
+const attendanceSheetSchema = mongoose.Schema(
   {
-    student: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
+    // teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher' },
+    // department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
+    // program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
+    // session: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },
+    // semester: { type: mongoose.Schema.Types.ObjectId, ref: 'Semester' },
+    // subject: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
+    teacher: String,
     department: String,
-    program: Number,
+    program: String,
+    session: String,
+    semester: String,
+    subject: String,
   },
   { timestamps: true },
 )
 
-module.exports = mongoose.model('Attendance', attendanceSchema)
+const attendanceSchema = mongoose.Schema(
+  {
+    // sheet: { type: mongoose.Schema.Types.ObjectId, ref: 'Sheet' },
+    // student: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
+    sheet: String,
+    student: String,
+    present: Boolean,
+  },
+  { timestamps: true },
+)
+
+module.exports = {
+  Attendance: mongoose.model('Attendance', attendanceSchema),
+  Sheet: mongoose.model('Sheet', attendanceSheetSchema),
+}

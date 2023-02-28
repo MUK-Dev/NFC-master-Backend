@@ -14,6 +14,7 @@ const subjectTeachersRoutes = require('./routes/subject-teachers-routes')
 const studentRoutes = require('./routes/student-routes')
 const parentRoutes = require('./routes/parent-routes')
 const attendanceRoutes = require('./routes/attendance-routes')
+const studentmarksRoutes = require('./routes/marks-routes')
 
 const RouteMessage = require('./utils/RouteMessage')
 const swaggerDocs = require('./utils/swagger')
@@ -58,6 +59,9 @@ class ExpressApp {
 
     //? === Attendance Routes ===
     this.app.use(attendanceRoutes)
+
+    //? === Student Marks Routes ===
+    this.app.use(studentmarksRoutes)
   }
 
   runApp() {

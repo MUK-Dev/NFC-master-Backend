@@ -1,15 +1,15 @@
 const express = require('express')
+const { studentmarks } = require('../controllers/marks-controller')
 
-const { markAttendanceList } = require('../controllers/attendance-controller')
 const isAuth = require('../middleware/isAuth')
 
 /**
  * @openapi
- * /api/attendance/student:
+ * /api/marks:
  *  post:
  *     tags:
- *     - Attendance
- *     description: Saves a list of students attendance
+ *     - StudentMarks
+ *     description: Saves a list of students marks
  *     requestBody:
  *      required: true
  *      content:
@@ -22,7 +22,7 @@ const isAuth = require('../middleware/isAuth')
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/AttendanceListPostResponse'
+ *              $ref: '#/components/schemas/MarksResponse'
  *       404:
  *        description: Invalid request
  *       500:
@@ -31,6 +31,6 @@ const isAuth = require('../middleware/isAuth')
 
 const router = express.Router()
 
-router.route('/api/attendance/student').post(markAttendanceList)
+router.route('/api/marks').post(isAuth, studentmarks)
 
 module.exports = router
