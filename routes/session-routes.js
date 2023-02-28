@@ -51,9 +51,6 @@ const isAuth = require('../middleware/isAuth')
 
 const router = express.Router()
 
-router
-  .route('/api/sessions')
-  .get(isAuth, getAllSessions)
-  .post(isAuth, registerSession)
+router.route('/api/sessions').get(getAllSessions).post(isAuth, registerSession)
 
 module.exports = router
