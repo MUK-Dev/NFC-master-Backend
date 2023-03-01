@@ -1,5 +1,4 @@
 const Model = require('../models/subject-model')
-const HttpError = require('../utils/HttpError')
 
 const registerSubject = async (req, res, next) => {
   const {
@@ -59,12 +58,12 @@ const registerSubject = async (req, res, next) => {
 
 const getAllSubjects = async (req, res, next) => {
   try {
-    const data = await Model.find().populate([
-      'department',
-      'program',
-      'session',
-      'semester',
-    ])
+    const data = await Model.find({
+      department: req.query.department,
+      program: req.query.program,
+      session: req.query.session,
+      semester: req.query.semester,
+    }).populate(['department', 'program', 'session', 'semester'])
     res.status(200).send(data)
   } catch (err) {
     return res

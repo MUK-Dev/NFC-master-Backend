@@ -7,6 +7,7 @@ const subjectSchema = mongoose.Schema(
     program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
     session: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },
     semester: { type: mongoose.Schema.Types.ObjectId, ref: 'Semester' },
+    semester: { type: mongoose.Schema.Types.ObjectId, ref: 'Section' },
     subject: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
     change_history: [],
   },

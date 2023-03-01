@@ -14,9 +14,9 @@ const mongoose = require('mongoose')
  *        subject_code:
  *          type: string
  *        theory_hours:
- *          type: number
+ *          type: string
  *        lab_hours:
- *          type: number
+ *          type: string
  *        department:
  *          type: string
  *          format: uuid
@@ -82,8 +82,8 @@ const subjectSchema = mongoose.Schema(
     subject_title: String,
     type: String,
     subject_code: String,
-    theory_hours: Number,
-    lab_hours: Number,
+    theory_hours: String,
+    lab_hours: String,
     department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
     program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
     session: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },

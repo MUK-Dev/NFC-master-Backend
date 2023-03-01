@@ -5,8 +5,8 @@ const registerSemester = async (req, res, next) => {
   const {
     semester_title,
     type,
-    starting_year,
-    ending_year,
+    starting,
+    ending,
     department,
     program,
     session,
@@ -14,8 +14,8 @@ const registerSemester = async (req, res, next) => {
   const required = {
     semester_title,
     type,
-    starting_year,
-    ending_year,
+    starting,
+    ending,
     department,
     program,
     session,
@@ -30,8 +30,8 @@ const registerSemester = async (req, res, next) => {
   const semester = Model({
     semester_title,
     type,
-    starting_year,
-    ending_year,
+    starting,
+    ending,
     department,
     program,
     session,
@@ -53,11 +53,11 @@ const registerSemester = async (req, res, next) => {
 
 const getAllSemesters = async (req, res, next) => {
   try {
-    const data = await Model.find().populate([
-      'department',
-      'program',
-      'session',
-    ])
+    const data = await Model.find({
+      department: req.query.department,
+      program: req.query.program,
+      session: req.query.session,
+    }).populate(['department', 'program', 'session'])
     res.status(200).send(data)
   } catch (err) {
     return res

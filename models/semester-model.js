@@ -11,9 +11,9 @@ const mongoose = require('mongoose')
  *          type: string
  *        type:
  *          type: string
- *        starting_year:
+ *        starting:
  *          type: string
- *        ending_year:
+ *        ending:
  *          type: string
  *        department:
  *          type: string
@@ -44,9 +44,9 @@ const mongoose = require('mongoose')
  *          type: string
  *        type:
  *          type: string
- *        starting_year:
+ *        starting:
  *          type: string
- *        ending_year:
+ *        ending:
  *          type: string
  *        department:
  *          type: string
@@ -71,8 +71,8 @@ const semesterSchema = mongoose.Schema(
   {
     semester_title: String,
     type: String,
-    starting_year: String,
-    ending_year: String,
+    starting: String,
+    ending: String,
     department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
     program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
     session: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },

@@ -33,7 +33,9 @@ const registerStudent = async (req, res) => {
     const userProgram = await Program.findById(program)
     const userSession = await Session.findById(session)
 
-    email = `${userSession.session_title}${userProgram.program_abbreviation}${rollNo}@undergrad.nfciet.edu.pk`
+    email = `${
+      userSession.session_title
+    }${userProgram.program_abbreviation.toLowerCase()}${rollNo}@undergrad.nfciet.edu.pk`
   } catch (err) {
     console.log(err)
     return res
