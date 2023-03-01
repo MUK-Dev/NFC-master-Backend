@@ -49,7 +49,10 @@ const registerSession = async (req, res, next) => {
 
 const getAllSessions = async (req, res, next) => {
   try {
-    const data = await Model.find().populate(['department', 'program'])
+    const data = await Model.find({
+      department: req.query.department,
+      program: req.query.program,
+    }).populate(['department', 'program'])
     res.status(200).send(data)
   } catch (err) {
     return res

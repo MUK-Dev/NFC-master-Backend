@@ -13,6 +13,22 @@ const isAuth = require('../middleware/isAuth')
  *     tags:
  *     - Sections
  *     description: Returns all registered sections
+ *     parameters:
+ *       - in: query
+ *         name: department
+ *         schema:
+ *           type: string
+ *         required: true
+ *       - in: query
+ *         name: program
+ *         schema:
+ *           type: string
+ *         required: true
+ *       - in: query
+ *         name: session
+ *         schema:
+ *           type: string
+ *         required: true
  *     responses:
  *       200:
  *        description: Success

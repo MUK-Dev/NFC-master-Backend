@@ -15,6 +15,9 @@ const mongoose = require('mongoose')
  *        program:
  *          type: string
  *          format: uuid
+ *        session:
+ *          type: string
+ *          format: uuid
  *    RegisterSectionResponse:
  *      type: object
  *      properties:
@@ -39,6 +42,9 @@ const mongoose = require('mongoose')
  *        program:
  *          type: string
  *          default: Program
+ *        session:
+ *          type: string
+ *          default: Session
  *        change_history:
  *          type: array
  *        createdAt:
@@ -54,6 +60,7 @@ const sectionSchema = mongoose.Schema(
     section_title: String,
     department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
     program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
+    session: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },
     change_history: [],
   },
   { timestamps: true },

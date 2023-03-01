@@ -1,5 +1,4 @@
 const Model = require('../models/program-model')
-const HttpError = require('../utils/HttpError')
 
 const registerProgram = async (req, res, next) => {
   const {
@@ -50,7 +49,9 @@ const registerProgram = async (req, res, next) => {
 
 const getAllPrograms = async (req, res, next) => {
   try {
-    const data = await Model.find().populate('department')
+    const data = await Model.find({
+      department: req.query.department,
+    }).populate('department')
     res.status(200).send(data)
   } catch (err) {
     return res

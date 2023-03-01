@@ -1,11 +1,12 @@
 const Model = require('../models/section-model')
 
 const registerSection = async (req, res) => {
-  const { section_title, department, program } = req.body
+  const { section_title, department, program, session } = req.body
   const required = {
     section_title,
     department,
     program,
+    session,
   }
 
   for (let val in required) {
@@ -18,6 +19,7 @@ const registerSection = async (req, res) => {
     section_title,
     department,
     program,
+    session,
   })
 
   try {
@@ -36,7 +38,11 @@ const registerSection = async (req, res) => {
 
 const getAllSections = async (req, res, next) => {
   try {
-    const data = await Model.find().populate(['department', 'program'])
+    const data = await Model.find({
+      department: req.query.department,
+      program: req.query.program,
+      session: req.query.session,
+    }).populate(['department', 'program', 'session'])
     res.status(200).send(data)
   } catch (err) {
     return res
