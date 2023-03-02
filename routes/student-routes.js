@@ -3,6 +3,7 @@ const express = require('express')
 const {
   findStudents,
   getAllStudents,
+  getStudentsAttendanceData,
 } = require('../controllers/student-controller')
 const isAuth = require('../middleware/isAuth')
 
@@ -52,6 +53,43 @@ const isAuth = require('../middleware/isAuth')
  *        description: Unauthorized
  *       500:
  *        description: Something went wrong (Server error)
+ * /api/attendance-student-data:
+ *  get:
+ *     tags:
+ *     - Students
+ *     description: Returns students data for attendance
+ *     parameters:
+ *       - in: query
+ *         name: department
+ *         schema:
+ *           type: string
+ *         required: true
+ *       - in: query
+ *         name: program
+ *         schema:
+ *           type: string
+ *         required: true
+ *       - in: query
+ *         name: session
+ *         schema:
+ *           type: string
+ *         required: true
+ *       - in: query
+ *         name: section
+ *         schema:
+ *           type: string
+ *         required: true
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/StudentAttendanceDataResponse'
+ *       401:
+ *        description: Unauthorized
+ *       500:
+ *        description: Something went wrong (Server error)
  */
 
 const router = express.Router()
@@ -59,5 +97,9 @@ const router = express.Router()
 router.route('/api/students/search').post(isAuth, findStudents)
 
 router.route('/api/students').get(isAuth, getAllStudents)
+
+router
+  .route('/api/attendance-student-data')
+  .get(isAuth, getStudentsAttendanceData)
 
 module.exports = router

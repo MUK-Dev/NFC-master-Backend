@@ -25,7 +25,36 @@ const getAllStudents = async (req, res, next) => {
   }
 }
 
+const getStudentsAttendanceData = async (req, res) => {
+  const query = req.query
+
+  try {
+    const data = await Student.find({
+      department: query.department,
+      program: query.program,
+      session: query.session,
+      section: query.section,
+    })
+      .select('-password')
+      .sort({ rollNo: 1 })
+
+    const modifiedData = data.map(student => ({
+      _id: student._id,
+      name: student.name,
+      avatar: student.avatar,
+      rollNo: student.rollNo,
+      present: false,
+    }))
+
+    res.status(200).send(modifiedData)
+  } catch (err) {
+    console.error(err)
+    res.status(500).send({ message: 'Somthing went wrong', type: 'server' })
+  }
+}
+
 module.exports = {
   findStudents,
   getAllStudents,
+  getStudentsAttendanceData,
 }

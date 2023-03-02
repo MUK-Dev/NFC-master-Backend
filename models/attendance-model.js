@@ -32,6 +32,9 @@ const mongoose = require('mongoose')
  *          subject:
  *              type: string
  *              default: Subject
+ *          date:
+ *            type: string
+ *            format: date-time
  *          list:
  *            type: array
  *            items:
@@ -48,28 +51,21 @@ const mongoose = require('mongoose')
 
 const attendanceSheetSchema = mongoose.Schema(
   {
-    // teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher' },
-    // department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
-    // program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
-    // session: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },
-    // semester: { type: mongoose.Schema.Types.ObjectId, ref: 'Semester' },
-    // subject: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
-    teacher: String,
-    department: String,
-    program: String,
-    session: String,
-    semester: String,
-    subject: String,
+    teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher' },
+    department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
+    program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
+    session: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },
+    semester: { type: mongoose.Schema.Types.ObjectId, ref: 'Semester' },
+    subject: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
+    date: Date,
   },
   { timestamps: true },
 )
 
 const attendanceSchema = mongoose.Schema(
   {
-    // sheet: { type: mongoose.Schema.Types.ObjectId, ref: 'Sheet' },
-    // student: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
-    sheet: String,
-    student: String,
+    sheet: { type: mongoose.Schema.Types.ObjectId, ref: 'Sheet' },
+    student: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
     present: Boolean,
   },
   { timestamps: true },

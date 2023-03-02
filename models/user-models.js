@@ -55,6 +55,21 @@ const bcrypt = require('bcrypt')
  *          type: string
  *        updatedAt:
  *          type: string
+ *    StudentAttendanceDataResponse:
+ *      type: array
+ *      items:
+ *        $ref: '#/components/schemas/StudentAttendanceData'
+ *    StudentAttendanceData:
+ *      type: object
+ *      properties:
+ *        _id:
+ *          type: string
+ *        name:
+ *          type: string
+ *        avatar:
+ *          type: string
+ *        present:
+ *          type: boolean
  *    TokenResponse:
  *      type: object
  *      properties:
