@@ -11,6 +11,25 @@ const mongoose = require('mongoose')
  *          type: string
  *        type:
  *          type: string
+ *    AttendanceChartDataResponse:
+ *      type: object
+ *      properties:
+ *        x:
+ *          type: string
+ *          format: date-time
+ *        y:
+ *          type: number
+ *    AttendanceCalendarDataResponse:
+ *      type: object
+ *      properties:
+ *        title:
+ *          type: string
+ *        date:
+ *          type: string
+ *          format: date-time
+ *        color:
+ *          type: string
+ *          default: "#4caf50 or #ef5350"
  *    AttendanceListRequest:
  *      type: object
  *      properties:
@@ -67,6 +86,7 @@ const attendanceSchema = mongoose.Schema(
     sheet: { type: mongoose.Schema.Types.ObjectId, ref: 'Sheet' },
     student: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
     present: Boolean,
+    date: Date,
   },
   { timestamps: true },
 )
