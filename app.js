@@ -1,6 +1,8 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const winston = require('winston')
+const expressWinston = require('express-winston')
 const mongoose = require('mongoose')
 
 const authRoutes = require('./routes/auth-routes')
@@ -25,6 +27,31 @@ class ExpressApp {
     this.app = express()
     this.app.use(express.json())
     this.app.use(cors())
+    this.app.use(
+      expressWinston.logger({
+        transports: [new winston.transports.Console()],
+        format: winston.format.combine(
+          winston.format.colorize(),
+          winston.format.json(),
+          winston.format.cli(),
+        ),
+        msg: 'HTTP {{req.method}} {{req.url}}',
+        expressFormat: true,
+        colorize: true,
+        ignoreRoute: function (req, res) {
+          return false
+        },
+      }),
+    )
+    this.app.use(
+      expressWinston.errorLogger({
+        transports: [new winston.transports.Console()],
+        format: winston.format.combine(
+          winston.format.colorize(),
+          winston.format.json(),
+        ),
+      }),
+    )
   }
 
   registerRoutes() {

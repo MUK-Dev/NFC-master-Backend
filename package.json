@@ -15,11 +15,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
+    "express-winston": "^4.2.0",
     "jsonwebtoken": "^9.0.0",
     "moment": "^2.29.4",
     "mongoose": "^6.6.4",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.6.0"
+    "swagger-ui-express": "^4.6.0",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "prettier": "^2.8.3"
