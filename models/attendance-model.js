@@ -4,12 +4,30 @@ const mongoose = require('mongoose')
  * @openapi
  * components:
  *  schemas:
+ *    GetSheetResponse:
+ *      type: object
+ *      properties:
+ *        sheet:
+ *          $ref: '#/components/schemas/Sheet'
+ *        list:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/Attendance'
+ *    MarkByQrPostResponse:
+ *      type: object
+ *      properties:
+ *        message:
+ *          type: string
+ *        type:
+ *          type: string
  *    AttendanceListPostResponse:
  *      type: object
  *      properties:
  *        message:
  *          type: string
  *        type:
+ *          type: string
+ *        sheet:
  *          type: string
  *    AttendanceChartDataResponse:
  *      type: object
@@ -48,6 +66,9 @@ const mongoose = require('mongoose')
  *          semester:
  *              type: string
  *              default: Semester
+ *          section:
+ *            type: string
+ *            default: Section
  *          subject:
  *              type: string
  *              default: Subject
@@ -66,6 +87,43 @@ const mongoose = require('mongoose')
  *          default: Student
  *        present:
  *          type: boolean
+ *    MarkAttendanceByQRRequest:
+ *      type: object
+ *      properties:
+ *        student:
+ *          type: string
+ *          default: Student
+ *    GetAllSheetsResponse:
+ *      type: array
+ *      items:
+ *        $ref: '#/components/schemas/Sheet'
+ *    Sheet:
+ *      type: object
+ *      properties:
+ *          teacher:
+ *              type: string
+ *              default: Teacher
+ *          department:
+ *              type: string
+ *              default: Department
+ *          program:
+ *              type: string
+ *              default: Program
+ *          session:
+ *              type: string
+ *              default: Session
+ *          semester:
+ *              type: string
+ *              default: Semester
+ *          section:
+ *            type: string
+ *            default: Section
+ *          subject:
+ *              type: string
+ *              default: Subject
+ *          date:
+ *            type: string
+ *            format: date-time
  */
 
 const attendanceSheetSchema = mongoose.Schema(
@@ -74,6 +132,7 @@ const attendanceSheetSchema = mongoose.Schema(
     department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
     program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
     session: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },
+    section: { type: mongoose.Schema.Types.ObjectId, ref: 'Section' },
     semester: { type: mongoose.Schema.Types.ObjectId, ref: 'Semester' },
     subject: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
     date: Date,

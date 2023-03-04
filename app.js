@@ -18,8 +18,8 @@ const parentRoutes = require('./routes/parent-routes')
 const attendanceRoutes = require('./routes/attendance-routes')
 const studentmarksRoutes = require('./routes/marks-routes')
 const sectionRoutes = require('./routes/section-routes')
+const sheetRoutes = require('./routes/sheet-routes')
 
-const RouteMessage = require('./utils/RouteMessage')
 const swaggerDocs = require('./utils/swagger')
 
 class ExpressApp {
@@ -90,6 +90,9 @@ class ExpressApp {
 
     //? === Attendance Routes ===
     this.app.use(attendanceRoutes)
+
+    //? === Sheet Routes ===
+    this.app.use(sheetRoutes)
 
     //? === Student Marks Routes ===
     this.app.use(studentmarksRoutes)

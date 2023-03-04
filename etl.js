@@ -12,15 +12,15 @@ const { Sheet, Attendance } = require('./models/attendance-model')
     })
     .catch(err => console.error(err))
   try {
-    const sheets = await Sheet.find()
-    for (let sheet of sheets) {
-      await Attendance.updateMany(
-        { sheet: sheet._id },
-        { $set: { date: sheet.date } },
-      ).clone()
-    }
-    const attendanceDate = await Attendance.find({ sheet: sheets[0]._id })
-    console.log(attendanceDate)
+    await Sheet.updateMany({}, { section: '63ff0f5ff4bceba698b5320b' })
+    // for (let sheet of sheets) {
+    //   await Attendance.updateMany(
+    //     { sheet: sheet._id },
+    //     { $set: { date: sheet.date } },
+    //   ).clone()
+    // }
+    // const attendanceDate = await Attendance.find({ sheet: sheets[0]._id })
+    // console.log(attendanceDate)
     mongoose.connection.close().then(() => console.log('Job done'))
   } catch (err) {
     console.log(err)
