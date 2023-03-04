@@ -4,14 +4,16 @@ const getAllSheets = async (req, res) => {
   try {
     const sheets = await Sheet.find({
       teacher: req.userInfo.tokenUser.id,
-    }).populate([
-      'department',
-      'program',
-      'session',
-      'section',
-      'semester',
-      'subject',
-    ])
+    })
+      .sort({ date: -1 })
+      .populate([
+        'department',
+        'program',
+        'session',
+        'section',
+        'semester',
+        'subject',
+      ])
     res.status(200).send(sheets)
   } catch (err) {
     console.log(err)
