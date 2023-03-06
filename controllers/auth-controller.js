@@ -413,9 +413,12 @@ const getUser = async (req, res, next) => {
     if (!user)
       user = await Admin.findById(req.userInfo.tokenUser.id).select('-password')
     if (!user)
-      user = await Teacher.findById(req.userInfo.tokenUser.id).select(
-        '-password',
-      )
+      user = await Teacher.findById(req.userInfo.tokenUser.id)
+        .select('-password')
+        .populate({
+          path: 'subjects',
+          populate: 'subject',
+        })
     if (!user)
       return res
         .status(404)
