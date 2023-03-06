@@ -156,14 +156,11 @@ const markAttendanceByQr = async (req, res) => {
       date: sheet.date,
     })
     if (existingEntry && existingEntry?.present) {
-      console.log('Already marked condition')
       return res.status(200).send({
         type: 'already-marked',
         message: 'Your attendance is already marked',
       })
     } else if (existingEntry && !existingEntry?.present) {
-      console.log('Update triggered')
-
       await Attendance.updateOne(
         {
           sheet: sheet._id,
@@ -177,7 +174,6 @@ const markAttendanceByQr = async (req, res) => {
         message: 'Marked your attendance',
       })
     } else if (!existingEntry) {
-      console.log('New Record Generated')
       const newAttendance = Attendance({
         sheet: sheet._id,
         student,
