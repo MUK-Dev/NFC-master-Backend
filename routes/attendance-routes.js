@@ -105,6 +105,6 @@ router
   .route('/api/attendance/student/calendar-data')
   .get(isAuth, getAttendanceCalendarData)
 
-router.route('/api/mark-by-qr/:sheetId').post(markAttendanceByQr)
+router.route('/api/mark-by-qr/:sheetId').post(isAuth, markAttendanceByQr)
 
 module.exports = router

@@ -139,7 +139,7 @@ const getAttendanceCalendarData = async (req, res) => {
 }
 
 const markAttendanceByQr = async (req, res) => {
-  const { student } = req.body
+  const student = req.userInfo.tokenUser.id
   let sheet
   try {
     sheet = await Sheet.findById(req.params.sheetId)
