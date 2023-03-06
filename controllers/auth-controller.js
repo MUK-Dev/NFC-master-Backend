@@ -292,13 +292,14 @@ const registerTeacher = async (req, res) => {
   let avatar
   let existingTeacher
 
-  const { name, email, password, phoneNo } = req.body
+  const { name, email, password, phoneNo, subjects } = req.body
 
   console.table({
     name,
     email,
     password,
     phoneNo,
+    subjects,
   })
 
   const avatarHash = createAvatarHash(email)
@@ -342,6 +343,7 @@ const registerTeacher = async (req, res) => {
       password,
       phoneNo,
       avatar,
+      subjects,
       role: 'Teacher',
     })
 

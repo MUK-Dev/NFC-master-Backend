@@ -2,6 +2,7 @@ const express = require('express')
 
 const {
   registerSubject,
+  getAllSubjectsDependent,
   getAllSubjects,
 } = require('../controllers/subject-controller')
 const isAuth = require('../middleware/isAuth')
@@ -47,6 +48,22 @@ const isAuth = require('../middleware/isAuth')
  *        description: Invalid request
  *       500:
  *        description: Something went wrong (Server error)
+ * /api/all-subjects:
+ *  get:
+ *     tags:
+ *     - Subjects
+ *     description: Returns all registered subjects
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/AllSubjectsResponse'
+ *       404:
+ *        description: Invalid request
+ *       500:
+ *        description: Something went wrong (Server error)
  *  post:
  *     tags:
  *     - Subjects
@@ -74,7 +91,9 @@ const router = express.Router()
 
 router
   .route('/api/subjects')
-  .get(isAuth, getAllSubjects)
+  .get(isAuth, getAllSubjectsDependent)
   .post(isAuth, registerSubject)
+
+router.route('/api/all-subjects').get(getAllSubjects)
 
 module.exports = router

@@ -56,7 +56,7 @@ const registerSubject = async (req, res, next) => {
   }
 }
 
-const getAllSubjects = async (req, res, next) => {
+const getAllSubjectsDependent = async (req, res, next) => {
   try {
     const data = await Model.find({
       department: req.query.department,
@@ -64,8 +64,25 @@ const getAllSubjects = async (req, res, next) => {
       session: req.query.session,
       semester: req.query.semester,
     }).populate(['department', 'program', 'session', 'semester'])
-    res.status(200).send(data)
+    return res.status(200).send(data)
   } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'subjects' })
+  }
+}
+
+const getAllSubjects = async (req, res) => {
+  try {
+    const data = await Model.find().populate([
+      'department',
+      'program',
+      'session',
+      'semester',
+    ])
+    return res.status(200).send(data)
+  } catch (err) {
+    console.log(err)
     return res
       .status(500)
       .send({ message: 'Something went wrong', type: 'subjects' })
@@ -75,4 +92,5 @@ const getAllSubjects = async (req, res, next) => {
 module.exports = {
   registerSubject,
   getAllSubjects,
+  getAllSubjectsDependent,
 }

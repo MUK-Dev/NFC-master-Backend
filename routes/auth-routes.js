@@ -134,7 +134,7 @@ const isAuth = require('../middleware/isAuth')
  *      content:
  *        application/json:
  *           schema:
- *              $ref: '#/components/schemas/RegisterParentRequest'
+ *              $ref: '#/components/schemas/RegisterTeacherRequest'
  *     responses:
  *       200:
  *        description: Success

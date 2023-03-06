@@ -118,6 +118,31 @@ const bcrypt = require('bcrypt')
  *          type: string
  *        password:
  *          type: string
+ *    RegisterTeacherRequest:
+ *      type: object
+ *      properties:
+ *        name:
+ *          type: string
+ *        email:
+ *          type: string
+ *        phoneNo:
+ *          type: string
+ *        password:
+ *          type: string
+ *        subjects:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/TeacherSubjects'
+ *    TeacherSubjects:
+ *      type: object
+ *      properties:
+ *        subject:
+ *          type: string
+ *          default: Subject
+ *        lab_hours:
+ *          type: string
+ *        theory_hours:
+ *          type: string
  *    MarksResponse:
  *      type: array
  *      items:
@@ -177,6 +202,13 @@ const teacherSchema = mongoose.Schema(
     password: String,
     avatar: String,
     role: String,
+    subjects: [
+      {
+        subject: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
+        lab_hours: String,
+        theory_hours: String,
+      },
+    ],
   },
   { timestamps: true },
 )
