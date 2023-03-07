@@ -416,8 +416,8 @@ const getUser = async (req, res, next) => {
       user = await Teacher.findById(req.userInfo.tokenUser.id)
         .select('-password')
         .populate({
-          path: 'subjects',
-          populate: 'subject',
+          path: 'subjects.subject',
+          populate: ['department', 'program', 'semester', 'session'],
         })
     if (!user)
       return res
