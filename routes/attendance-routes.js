@@ -5,7 +5,9 @@ const {
   getAttendanceChartData,
   getAttendanceCalendarData,
   markAttendanceByQr,
+  updateAttendanceList,
 } = require('../controllers/attendance-controller')
+
 const isAuth = require('../middleware/isAuth')
 
 /**
@@ -14,6 +16,34 @@ const isAuth = require('../middleware/isAuth')
  *  post:
  *     tags:
  *     - Attendance
+ *     description: Saves a list of students attendance
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schemas/AttendanceListRequest'
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/AttendanceListPostResponse'
+ *       404:
+ *        description: Invalid request
+ *       500:
+ *        description: Something went wrong (Server error)
+ * /api/attendance/student/{sheetId}:
+ *  patch:
+ *     tags:
+ *     - Attendance
+ *     parameters:
+ *       - in: path
+ *         name: sheetId
+ *         schema:
+ *           type: string
+ *         required: true
  *     description: Saves a list of students attendance
  *     requestBody:
  *      required: true
@@ -97,6 +127,11 @@ const isAuth = require('../middleware/isAuth')
 const router = express.Router()
 
 router.route('/api/attendance/student').post(isAuth, markAttendanceList)
+
+router
+  .route('/api/attendance/student/:sheetId')
+  .patch(isAuth, updateAttendanceList)
+
 router
   .route('/api/attendance/student/chart-data')
   .get(isAuth, getAttendanceChartData)

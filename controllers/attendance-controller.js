@@ -73,6 +73,38 @@ const markAttendanceList = async (req, res) => {
     .send({ message: 'success', type: 'mark-attendance', sheet: sheet._id })
 }
 
+const updateAttendanceList = async (req, res) => {
+  const { list } = req.body
+
+  // console.log(list)
+
+  if (list.length <= 0)
+    return res
+      .status(404)
+      .send({ message: `List can not be empty`, type: 'list' })
+
+  try {
+    for (let item of list) {
+      await Attendance.updateOne(
+        {
+          sheet: req.params.sheetId,
+          _id: item.student,
+        },
+        { $set: { present: item.present } },
+      )
+    }
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(500)
+      .send({ type: 'server', message: 'Something went wrong' })
+  }
+
+  res
+    .status(200)
+    .send({ message: 'Marked attendance', type: 'mark-attendance' })
+}
+
 const getAttendanceChartData = async (req, res) => {
   try {
     const data = await Attendance.find({
@@ -200,4 +232,5 @@ module.exports = {
   getAttendanceChartData,
   getAttendanceCalendarData,
   markAttendanceByQr,
+  updateAttendanceList,
 }
