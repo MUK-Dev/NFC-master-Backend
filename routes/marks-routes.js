@@ -1,6 +1,8 @@
 const express = require('express')
 const { studentmarks } = require('../controllers/marks-controller')
 
+const { markMarksList } = require('../controllers/marks-controller')
+
 const isAuth = require('../middleware/isAuth')
 
 /**
@@ -32,5 +34,7 @@ const isAuth = require('../middleware/isAuth')
 const router = express.Router()
 
 router.route('/api/marks').post(studentmarks)
+
+router.route('/api/marks/student').post(isAuth, markMarksList)
 
 module.exports = router
