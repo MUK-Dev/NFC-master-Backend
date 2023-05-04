@@ -29,6 +29,17 @@ const mongoose = require('mongoose')
  *          type: string
  *        sheet:
  *          type: string
+ *    SubjectAttendanceReportRequest:
+ *      type: object
+ *      properties:
+ *        subjectId:
+ *          type: string
+ *          default: Subject
+ *    SubjectAttendanceReportResponse:
+ *      type: object
+ *      properties:
+ *        subjectId:
+ *          type: string
  *    AttendanceChartDataResponse:
  *      type: object
  *      properties:
@@ -135,6 +146,8 @@ const attendanceSheetSchema = mongoose.Schema(
     section: { type: mongoose.Schema.Types.ObjectId, ref: 'Section' },
     semester: { type: mongoose.Schema.Types.ObjectId, ref: 'Semester' },
     subject: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
+    subjectType: String,
+    creditHours: String,
     date: Date,
   },
   { timestamps: true },
