@@ -115,16 +115,17 @@ const generateSubjectReport = async (req, res) => {
           tableRows[j] = [
             attendanceRecords[j].student._id,
             `${attendanceRecords[j].student.name} - ${attendanceRecords[j].student.rollNo}`,
-            attendanceRecords[j].present ? 'P' : 'A',
-          ]
-        else if (!!tableRows[j]) {
-          tableRows[j].push(
-            attendanceRecords.filter(r =>
-              r.student._id.equals(tableRows[j][0]),
-            )[0]?.present
+            attendanceRecords[j].leave
+              ? 'L'
+              : attendanceRecords[j].present
               ? 'P'
               : 'A',
-          )
+          ]
+        else if (!!tableRows[j]) {
+          const record = attendanceRecords.filter(r =>
+            r.student._id.equals(tableRows[j][0]),
+          )[0]
+          tableRows[j].push(record.leave ? 'L' : record.present ? 'P' : 'A')
         } else tableRows[j].push('null')
       }
     }
