@@ -44,6 +44,7 @@ const getStudentsAttendanceData = async (req, res) => {
       avatar: student.avatar,
       rollNo: student.rollNo,
       present: false,
+      leave: false,
     }))
 
     res.status(200).send(modifiedData)

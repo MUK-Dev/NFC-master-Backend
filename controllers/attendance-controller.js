@@ -1,7 +1,5 @@
 const moment = require('moment')
 const { Sheet, Attendance } = require('../models/attendance-model')
-const { Teacher } = require('../models/user-models')
-const Subject = require('../models/subject-model')
 
 const markAttendanceList = async (req, res) => {
   const {
@@ -52,8 +50,7 @@ const markAttendanceList = async (req, res) => {
   })
 
   try {
-    const s = await sheet.save()
-    console.log(s)
+    await sheet.save()
   } catch (err) {
     console.log(err)
     return res
@@ -62,6 +59,7 @@ const markAttendanceList = async (req, res) => {
   }
 
   for (let item of list) {
+    console.log(item)
     const singleStudentAttendance = Attendance({
       ...item,
       sheet: sheet._id,
@@ -85,15 +83,21 @@ const markAttendanceList = async (req, res) => {
 // 63ff16eb005ddd64e4564796
 
 const generateSubjectReport = async (req, res) => {
-  const { subjectId } = req.body
+  const { subjectId, sectionId } = req.body
   try {
     const sheets = await Sheet.find({
       subject: subjectId,
+      section: sectionId,
       teacher: req.userInfo.tokenUser.id,
-      date: { $gte: moment().subtract(1, 'days').toDate() },
     })
       .sort({ date: 1 })
       .populate(['subject', 'teacher'])
+
+    if (sheets.length <= 0) {
+      return res
+        .status(404)
+        .send({ message: 'No records found', type: 'sheets' })
+    }
 
     const tableColumn = ['ID', 'Name']
     const tableRows = []
@@ -168,7 +172,7 @@ const updateAttendanceList = async (req, res) => {
           sheet: req.params.sheetId,
           _id: item.student,
         },
-        { $set: { present: item.present } },
+        { $set: { present: item.present, leave: item.leave } },
       )
     }
   } catch (err) {
@@ -277,7 +281,7 @@ const markAttendanceByQr = async (req, res) => {
           student,
           date: sheet.date,
         },
-        { $set: { present: true } },
+        { $set: { present: true, leave: false } },
       )
       return res.status(200).send({
         type: 'marked',
@@ -289,6 +293,7 @@ const markAttendanceByQr = async (req, res) => {
         student,
         date: sheet.date,
         present: true,
+        leave: false,
       })
       await newAttendance.save()
       return res

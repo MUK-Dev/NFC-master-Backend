@@ -29,6 +29,11 @@ const { Sheet, Attendance } = require('./models/attendance-model')
     //   },
     // })
     // console.log(data)
+    const sheets = await Sheet.find({ teacher: '644e3b257dd225e87e6af597' })
+    for (let sheet of sheets) {
+      await Attendance.deleteMany({ sheet: sheet._id })
+    }
+    await Sheet.deleteMany({ teacher: '644e3b257dd225e87e6af597' })
     mongoose.connection.close().then(() => console.log('Job done'))
   } catch (err) {
     console.log(err)

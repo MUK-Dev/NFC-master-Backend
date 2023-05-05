@@ -98,6 +98,8 @@ const mongoose = require('mongoose')
  *          default: Student
  *        present:
  *          type: boolean
+ *        leave:
+ *          type: boolean
  *    MarkAttendanceByQRRequest:
  *      type: object
  *      properties:
@@ -158,6 +160,7 @@ const attendanceSchema = mongoose.Schema(
     sheet: { type: mongoose.Schema.Types.ObjectId, ref: 'Sheet' },
     student: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
     present: Boolean,
+    leave: Boolean,
     date: Date,
   },
   { timestamps: true },
