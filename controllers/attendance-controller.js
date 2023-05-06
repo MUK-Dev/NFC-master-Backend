@@ -9,6 +9,8 @@ const markAttendanceList = async (req, res) => {
     session,
     semester,
     subject,
+    subjectType,
+    creditHours,
     section,
     date,
     list,
@@ -22,6 +24,8 @@ const markAttendanceList = async (req, res) => {
     section,
     semester,
     subject,
+    subjectType,
+    creditHours,
     date,
     list,
   }
@@ -40,6 +44,8 @@ const markAttendanceList = async (req, res) => {
     section,
     semester,
     subject,
+    subjectType,
+    creditHours,
     date,
   })
 
@@ -53,6 +59,7 @@ const markAttendanceList = async (req, res) => {
   }
 
   for (let item of list) {
+    console.log(item)
     const singleStudentAttendance = Attendance({
       ...item,
       sheet: sheet._id,
@@ -73,6 +80,82 @@ const markAttendanceList = async (req, res) => {
     .send({ message: 'success', type: 'mark-attendance', sheet: sheet._id })
 }
 
+// 63ff16eb005ddd64e4564796
+
+const generateSubjectReport = async (req, res) => {
+  const { subjectId, sectionId } = req.body
+  try {
+    const sheets = await Sheet.find({
+      subject: subjectId,
+      section: sectionId,
+      teacher: req.userInfo.tokenUser.id,
+    })
+      .sort({ date: 1 })
+      .populate(['subject', 'teacher'])
+
+    if (sheets.length <= 0) {
+      return res
+        .status(404)
+        .send({ message: 'No records found', type: 'sheets' })
+    }
+
+    const tableColumn = ['ID', 'Name']
+    const tableRows = []
+
+    for (let i = 0; i < sheets.length; i++) {
+      const attendanceRecords = await Attendance.find({
+        sheet: sheets[i]._id,
+      })
+        .sort({ rollNo: 1 })
+        .populate('student')
+
+      tableColumn.push(moment(sheets[i].date).format('DD/MM/YYYY'))
+      for (let j = 0; j < attendanceRecords.length; j++) {
+        if (!!!tableRows[j])
+          tableRows[j] = [
+            attendanceRecords[j].student._id,
+            `${attendanceRecords[j].student.name} - ${attendanceRecords[j].student.rollNo}`,
+            attendanceRecords[j].leave
+              ? 'L'
+              : attendanceRecords[j].present
+              ? 'P'
+              : 'A',
+          ]
+        else if (!!tableRows[j]) {
+          const record = attendanceRecords.filter(r =>
+            r.student._id.equals(tableRows[j][0]),
+          )[0]
+          tableRows[j].push(record.leave ? 'L' : record.present ? 'P' : 'A')
+        } else tableRows[j].push('null')
+      }
+    }
+
+    for (let i = 0; i < tableRows.length; i++) {
+      let presentDays = 0
+      for (let j = 2; j < tableRows[i].length; j++) {
+        if (tableRows[i][j] === 'P') presentDays++
+      }
+      const percentage = Math.round(
+        (presentDays / (tableRows[i].length - 2)) * 100,
+      )
+      tableRows[i].push(`${percentage}%`)
+    }
+
+    tableColumn.push('%')
+    tableColumn.shift()
+    tableRows.map(row => row.shift())
+
+    return res.send({
+      tableColumn,
+      tableRows,
+      subject_name: sheets[0].subject.subject_title,
+      teacher_name: sheets[0].teacher.name,
+    })
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 const updateAttendanceList = async (req, res) => {
   const { list } = req.body
 
@@ -88,7 +171,7 @@ const updateAttendanceList = async (req, res) => {
           sheet: req.params.sheetId,
           _id: item.student,
         },
-        { $set: { present: item.present } },
+        { $set: { present: item.present, leave: item.leave } },
       )
     }
   } catch (err) {
@@ -197,7 +280,7 @@ const markAttendanceByQr = async (req, res) => {
           student,
           date: sheet.date,
         },
-        { $set: { present: true } },
+        { $set: { present: true, leave: false } },
       )
       return res.status(200).send({
         type: 'marked',
@@ -209,6 +292,7 @@ const markAttendanceByQr = async (req, res) => {
         student,
         date: sheet.date,
         present: true,
+        leave: false,
       })
       await newAttendance.save()
       return res
@@ -231,4 +315,5 @@ module.exports = {
   getAttendanceCalendarData,
   markAttendanceByQr,
   updateAttendanceList,
+  generateSubjectReport,
 }

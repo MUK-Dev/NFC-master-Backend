@@ -29,6 +29,17 @@ const mongoose = require('mongoose')
  *          type: string
  *        sheet:
  *          type: string
+ *    SubjectAttendanceReportRequest:
+ *      type: object
+ *      properties:
+ *        subjectId:
+ *          type: string
+ *          default: Subject
+ *    SubjectAttendanceReportResponse:
+ *      type: object
+ *      properties:
+ *        subjectId:
+ *          type: string
  *    AttendanceChartDataResponse:
  *      type: object
  *      properties:
@@ -87,6 +98,8 @@ const mongoose = require('mongoose')
  *          default: Student
  *        present:
  *          type: boolean
+ *        leave:
+ *          type: boolean
  *    MarkAttendanceByQRRequest:
  *      type: object
  *      properties:
@@ -135,6 +148,8 @@ const attendanceSheetSchema = mongoose.Schema(
     section: { type: mongoose.Schema.Types.ObjectId, ref: 'Section' },
     semester: { type: mongoose.Schema.Types.ObjectId, ref: 'Semester' },
     subject: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
+    subjectType: String,
+    creditHours: String,
     date: Date,
   },
   { timestamps: true },
@@ -145,6 +160,7 @@ const attendanceSchema = mongoose.Schema(
     sheet: { type: mongoose.Schema.Types.ObjectId, ref: 'Sheet' },
     student: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
     present: Boolean,
+    leave: Boolean,
     date: Date,
   },
   { timestamps: true },
