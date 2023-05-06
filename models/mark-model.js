@@ -145,7 +145,7 @@ const markSheetSchema = mongoose.Schema(
 
 const markSchema = mongoose.Schema(
   {
-    markSheet: { type: mongoose.Schema.Types.ObjectId, ref: 'Sheet' },
+    markSheet: { type: mongoose.Schema.Types.ObjectId, ref: 'MarkSheet' },
     student: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
     mids: Number,
     finals: Number,
@@ -159,6 +159,6 @@ const markSchema = mongoose.Schema(
 )
 
 module.exports = {
-  StudentMarks: mongoose.model('StudentMarks', markSchema),
+  StudentMark: mongoose.model('StudentMark', markSchema),
   MarkSheet: mongoose.model('MarkSheet', markSheetSchema),
 }

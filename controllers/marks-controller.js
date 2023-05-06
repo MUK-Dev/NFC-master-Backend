@@ -1,7 +1,7 @@
 const { Student } = require('../models/user-models')
-const { MarkSheet, StudentMarks } = require('../models/mark-model')
+const { MarkSheet, StudentMark } = require('../models/mark-model')
 
-const studentmarks = async (req, res, next) => {
+const studentMarks = async (req, res, next) => {
   console.log(req.body)
 
   try {
@@ -12,8 +12,8 @@ const studentmarks = async (req, res, next) => {
     })
       .select('-password')
       .sort({ rollNo: 1 })
-    console.log(req.body)
-    console.log(data)
+    // console.log(req.body)
+    // console.log(data)
 
     const modifiedUserArray = data.map(user => ({
       _id: user._id,
@@ -36,6 +36,73 @@ const studentmarks = async (req, res, next) => {
   // })
 
   // res.status(200).send({ message: 'success', type: 'marks' })
+}
+
+function calculateGPA(total) {
+  if (total >= 90) {
+    return 4
+  } else if (total >= 86) {
+    return 3.9
+  } else if (total >= 83) {
+    return 3.8
+  } else if (total >= 80) {
+    return 3.7
+  } else if (total >= 79) {
+    return 3.6
+  } else if (total >= 78) {
+    return 3.5
+  } else if (total >= 77) {
+    return 3.4
+  } else if (total >= 75) {
+    return 3.3
+  } else if (total >= 74) {
+    return 3.2
+  } else if (total >= 72) {
+    return 3.1
+  } else if (total >= 70) {
+    return 3.0
+  } else if (total >= 69) {
+    return 2.9
+  } else if (total >= 67) {
+    return 2.8
+  } else if (total >= 65) {
+    return 2.7
+  } else if (total >= 64) {
+    return 2.6
+  } else if (total >= 63) {
+    return 2.5
+  } else if (total >= 61) {
+    return 2.4
+  } else if (total >= 60) {
+    return 2.3
+  } else if (total >= 56) {
+    return 2.2
+  } else if (total >= 53) {
+    return 2.1
+  } else if (total >= 50) {
+    return 2.0
+  } else {
+    return 0.0
+  }
+}
+function calculateGrade(total) {
+  if (total >= 90) {
+    return 'A+'
+  } else if (total >= 80) {
+    return 'A'
+  } else if (total >= 75) {
+    return 'B+'
+  } else if (total >= 70) {
+    return 'B'
+  } else if (total >= 65) {
+    return 'B-'
+  } else if (total >= 60) {
+    return 'C+'
+  } else if (total >= 50) {
+    return 'C'
+  } else {
+    return 'F'
+  }
 }
 
 const markMarksList = async (req, res, next) => {
@@ -69,122 +136,111 @@ const markMarksList = async (req, res, next) => {
     }
   }
 
-  const sheet = MarkSheet({
-    teacher,
-    department,
-    program,
-    session,
-    section,
-    semester,
-    subject,
-    date,
-  })
-
-  try {
-    await sheet.save()
-  } catch (err) {
-    console.log(err)
+  const count = await MarkSheet.countDocuments({ teacher, subject, section })
+  console.log(count)
+  if (count > 0) {
     return res
       .status(500)
-      .message({ type: 'sheet', message: 'Could not save mark sheet' })
-  }
-
-  for (let item of list) {
-    const total =
-      parseInt(item.mids) + parseInt(item.finals) + parseInt(item.sessional)
-    let gpa
-    let grade
-    if (total >= 90) {
-      gpa = 4
-      grade = 'A+'
-    } else if (total >= 86) {
-      gpa = 3.9
-      grade = 'A'
-    } else if (total >= 83) {
-      gpa = 3.8
-      grade = 'A'
-    } else if (total >= 80) {
-      gpa = 3.7
-      grade = 'A'
-    } else if (total >= 79) {
-      gpa = 3.6
-      grade = 'B+'
-    } else if (total >= 78) {
-      gpa = 3.5
-      grade = 'B+'
-    } else if (total >= 77) {
-      gpa = 3.4
-      grade = 'B+'
-    } else if (total >= 75) {
-      gpa = 3.3
-      grade = 'B+'
-    } else if (total >= 74) {
-      gpa = 3.2
-      grade = 'B'
-    } else if (total >= 72) {
-      gpa = 3.1
-      grade = 'B'
-    } else if (total >= 70) {
-      gpa = 3.0
-      grade = 'B'
-    } else if (total >= 69) {
-      gpa = 2.9
-      grade = 'B-'
-    } else if (total >= 67) {
-      gpa = 2.8
-      grade = 'B-'
-    } else if (total >= 65) {
-      gpa = 2.7
-      grade = 'B-'
-    } else if (total >= 64) {
-      gpa = 2.6
-      grade = 'C+'
-    } else if (total >= 63) {
-      gpa = 2.5
-      grade = 'C+'
-    } else if (total >= 61) {
-      gpa = 2.4
-      grade = 'C+'
-    } else if (total >= 60) {
-      gpa = 2.3
-      grade = 'C+'
-    } else if (total >= 56) {
-      gpa = 2.2
-      grade = 'C'
-    } else if (total >= 53) {
-      gpa = 2.1
-      grade = 'C'
-    } else if (total >= 50) {
-      gpa = 2.0
-      grade = 'C'
-    } else if (total < 50) {
-      gpa = 0.0
-      grade = 'F'
-    }
-
-    const singleStudentMarks = StudentMarks({
-      ...item,
-      markSheet: sheet._id,
-      total,
-      gpa,
-      grade,
+      .send({ type: 'sheet', message: 'Mark already Entered' })
+  } else {
+    const markSheet = MarkSheet({
+      teacher,
+      department,
+      program,
+      session,
+      section,
+      semester,
+      subject,
+      date,
     })
+
     try {
-      await singleStudentMarks.save()
+      await markSheet.save()
+      console.log('sheet saved')
     } catch (err) {
       console.log(err)
       return res
         .status(500)
-        .message({ type: 'sheet', message: 'Could not save mark sheet' })
+        .send({ type: 'sheet', message: 'Could not save mark sheet' })
     }
+
+    for (let item of list) {
+      const total =
+        parseInt(item.mids) + parseInt(item.finals) + parseInt(item.sessional)
+      const gpa = calculateGPA(total)
+      const grade = calculateGrade(total)
+
+      const singleStudentMarks = StudentMark({
+        ...item,
+        markSheet: markSheet._id,
+        total,
+        gpa,
+        grade,
+      })
+      try {
+        await singleStudentMarks.save()
+        console.log('mark Saved')
+      } catch (err) {
+        console.log(err)
+        return res
+          .status(500)
+          .send({ type: 'sheet', message: 'Could not save marks Student' })
+      }
+    }
+
+    res
+      .status(200)
+      .send({
+        message: 'success',
+        type: 'mark-marks',
+        markSheet: markSheet._id,
+      })
+  }
+}
+
+const updateMarkList = async (req, res) => {
+  const { list } = req.body
+
+  try {
+    for (let item of list) {
+      const total =
+        parseInt(item.mids) + parseInt(item.finals) + parseInt(item.sessional)
+      const gpa = calculateGPA(total)
+      const grade = calculateGrade(total)
+
+      // console.log(item.mids, item.finals, item.sessional, item.student)
+
+      await StudentMark.updateOne(
+        {
+          markSheet: req.params.sheetId,
+          _id: item.student,
+        },
+        {
+          $set: {
+            mids: item.mids,
+            finals: item.finals,
+            sessional: item.sessional,
+            total: total,
+            gpa: gpa,
+            grade: grade,
+          },
+        },
+      )
+    }
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(500)
+      .send({ type: 'server', message: 'Something went wrong' })
   }
 
   res
     .status(200)
-    .send({ message: 'success', type: 'mark-marks', sheet: sheet._id })
+    .send({ message: 'Marked attendance', type: 'mark-attendance' })
 }
 
 module.exports = {
-  studentmarks,
+  studentMarks,
   markMarksList,
+  updateMarkList,
 }

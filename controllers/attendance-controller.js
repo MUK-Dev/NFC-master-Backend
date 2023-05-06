@@ -76,8 +76,6 @@ const markAttendanceList = async (req, res) => {
 const updateAttendanceList = async (req, res) => {
   const { list } = req.body
 
-  // console.log(list)
-
   if (list.length <= 0)
     return res
       .status(404)
