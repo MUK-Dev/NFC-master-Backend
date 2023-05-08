@@ -3,31 +3,70 @@ const { MarkSheet, StudentMark } = require('../models/mark-model')
 
 const studentMarks = async (req, res, next) => {
   console.log(req.body)
+  const count = await MarkSheet.countDocuments({
+    subject: req.body.subject,
+    section: req.body.section,
+  })
+  console.log(count)
+  if (count > 0) {
+    try {
+      const markList = await MarkSheet.find({
+        subject: req.body.subject,
+        section: req.body.section,
+      })
 
-  try {
-    const data = await Student.find({
-      session: req.body.session,
-      section: req.body.section,
-      program: req.body.program,
-    })
-      .select('-password')
-      .sort({ rollNo: 1 })
-    // console.log(req.body)
-    // console.log(data)
+      console.log(markList)
+      console.log(markList[0]._id)
+      const studentMarkList = await StudentMark.find({
+        markSheet: markList[0]._id,
+      }).populate('student')
 
-    const modifiedUserArray = data.map(user => ({
-      _id: user._id,
-      rollNo: user.rollNo,
-      name: user.name,
-      avatar: user.avatar,
-      mids: '',
-      sessional: '',
-      finals: '',
-    }))
+      const modifiedUserArray = studentMarkList.map(user => ({
+        _id: user.student._id,
+        rollNo: user.student.rollNo,
+        name: user.student.name,
+        avatar: user.student.avatar,
+        mids: '',
+        sessional: '',
+        finals: '',
+        lab_final: '',
+        lab_sessional: '',
+      }))
 
-    return res.send(modifiedUserArray)
-  } catch (err) {
-    console.log(err)
+      modifiedUserArray.sort(function (a, b) {
+        return a.rollNo - b.rollNo
+      })
+
+      return res.send(modifiedUserArray)
+    } catch (err) {
+      console.log(err)
+    }
+  } else {
+    try {
+      const studentList = await Student.find({
+        session: req.body.session,
+        section: req.body.section,
+        program: req.body.program,
+      })
+        .select('-password')
+        .sort({ rollNo: 1 })
+
+      const modifiedUserArray = studentList.map(user => ({
+        _id: user._id,
+        rollNo: user.rollNo,
+        name: user.name,
+        avatar: user.avatar,
+        mids: '',
+        sessional: '',
+        finals: '',
+        lab_final: '',
+        lab_sessional: '',
+      }))
+
+      return res.send(modifiedUserArray)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   // modifiedUserArray.map(user => {
@@ -137,7 +176,6 @@ const markMarksList = async (req, res, next) => {
   }
 
   const count = await MarkSheet.countDocuments({ teacher, subject, section })
-  console.log(count)
   if (count > 0) {
     return res
       .status(500)
@@ -188,13 +226,11 @@ const markMarksList = async (req, res, next) => {
       }
     }
 
-    res
-      .status(200)
-      .send({
-        message: 'success',
-        type: 'mark-marks',
-        markSheet: markSheet._id,
-      })
+    res.status(200).send({
+      message: 'success',
+      type: 'mark-marks',
+      markSheet: markSheet._id,
+    })
   }
 }
 
