@@ -190,7 +190,12 @@ const getAttendanceChartData = async (req, res) => {
   try {
     const data = await Attendance.find({
       student: req.userInfo.tokenUser.id,
+      date: {
+        $gte: moment().subtract(11, 'days').toDate(),
+        $lt: moment().toDate(),
+      },
     }).sort({ date: 1 })
+    console.log(data.length)
     let modifiedData = []
     let key = 'date'
 
