@@ -7,6 +7,7 @@ const {
   markAttendanceByQr,
   updateAttendanceList,
   generateSubjectReport,
+  getStudentCalendarData,
 } = require('../controllers/attendance-controller')
 
 const isAuth = require('../middleware/isAuth')
@@ -145,6 +146,28 @@ const isAuth = require('../middleware/isAuth')
  *        description: Invalid request
  *       500:
  *        description: Something went wrong (Server error)
+ * /api/attendance/calendar-data/{studentId}:
+ *  get:
+ *     tags:
+ *     - Attendance
+ *     description: Returns calendar data for a student
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         schema:
+ *           type: string
+ *         required: true
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/AttendanceCalendarDataResponse'
+ *       404:
+ *        description: Invalid request
+ *       500:
+ *        description: Something went wrong (Server error)
  */
 
 const router = express.Router()
@@ -158,6 +181,10 @@ router
 router
   .route('/api/attendance/student/chart-data')
   .get(isAuth, getAttendanceChartData)
+
+router
+  .route('/api/attendance/calendar-data/:studentId')
+  .get(isAuth, getStudentCalendarData)
 
 router
   .route('/api/attendance/subject-report')
