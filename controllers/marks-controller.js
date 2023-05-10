@@ -20,6 +20,7 @@ const studentMarks = async (req, res, next) => {
       const studentMarkList = await StudentMark.find({
         markSheet: markList._id,
       }).populate('student')
+      console.log(studentMarkList, '23')
 
       const modifiedUserArray = studentMarkList.map(user => ({
         _id: user.student._id,
@@ -56,11 +57,11 @@ const studentMarks = async (req, res, next) => {
         rollNo: user.rollNo,
         name: user.name,
         avatar: user.avatar,
-        mids: '',
-        sessional: '',
-        finals: '',
-        lab_final: '',
-        lab_sessional: '',
+        mids: 0,
+        sessional: 0,
+        finals: 0,
+        lab_final: 0,
+        lab_sessional: 0,
       }))
 
       return res.send(modifiedUserArray)
@@ -250,8 +251,20 @@ const markMarksList = async (req, res, next) => {
         let lab_total = 0
         let gpa = 0
         let grade = 'F'
+        console.log(
+          'line: 254',
+          '1st',
+          item.mids,
+          item.lab_final,
+          item.mids > 0 && item.lab_final > 0,
+          '2nd',
+          lab_hours,
+          lab_hours === '0',
+          '3rd',
+          theory_hours === '0',
+        )
         if (
-          !(item.mids === '' && item.lab_final === '') ||
+          (item.mids > 0 && item.lab_final > 0) ||
           lab_hours === '0' ||
           theory_hours === '0'
         ) {
