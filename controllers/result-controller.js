@@ -3,7 +3,10 @@ const { MarkSheet, StudentMark } = require('../models/mark-model')
 const getAllResultSheets = async (req, res) => {
   try {
     const resultSheets = await MarkSheet.find({
-      teacher: req.userInfo.tokenUser.id,
+      $or: [
+        { theory_teacher: req.userInfo.tokenUser.id },
+        { lab_teacher: req.userInfo.tokenUser.id },
+      ],
     })
       .sort({ date: -1 })
       .populate([
@@ -15,6 +18,7 @@ const getAllResultSheets = async (req, res) => {
         'subject',
       ])
     console.log('Get all result Sheet')
+    console.log(resultSheets)
     res.status(200).send(resultSheets)
   } catch (err) {
     console.log(err)

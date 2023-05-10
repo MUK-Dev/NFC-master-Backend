@@ -131,7 +131,8 @@ const mongoose = require('mongoose')
 
 const markSheetSchema = mongoose.Schema(
   {
-    teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher' },
+    theory_teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher' },
+    lab_teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher' },
     department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
     program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
     session: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },
@@ -150,6 +151,10 @@ const markSchema = mongoose.Schema(
     mids: Number,
     finals: Number,
     sessional: Number,
+    theory_total: Number,
+    lab_final: Number,
+    lab_sessional: Number,
+    lab_total: Number,
     total: Number,
     gpa: Number,
     grade: String,
