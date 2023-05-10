@@ -256,6 +256,38 @@ const getAttendanceCalendarData = async (req, res) => {
   }
 }
 
+const getStudentCalendarData = async (req, res) => {
+  const { studentId } = req.params
+  console.log(studentId)
+  try {
+    const data = await Attendance.find({
+      student: studentId,
+    })
+      .sort({ date: 1 })
+      .populate({
+        path: 'sheet',
+        populate: {
+          path: 'subject',
+        },
+      })
+
+    const modifiedData = data.map(a => ({
+      title: `${
+        a.present ? 'Present' : 'Absent'
+      } - ${a.sheet.subject.subject_title.match(/\b([A-Z])/g).join('')}`,
+      date: a.date,
+      color: a.present ? '#4caf50' : '#ef5350',
+    }))
+
+    res.status(200).send(modifiedData)
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(500)
+      .send({ type: 'server', message: 'Something went wrong' })
+  }
+}
+
 const markAttendanceByQr = async (req, res) => {
   const student = req.userInfo.tokenUser.id
   let sheet
@@ -321,4 +353,5 @@ module.exports = {
   markAttendanceByQr,
   updateAttendanceList,
   generateSubjectReport,
+  getStudentCalendarData,
 }
