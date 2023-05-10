@@ -1,6 +1,7 @@
 const { Student } = require('../models/user-models')
 const { MarkSheet, StudentMark } = require('../models/mark-model')
 const Subject = require('../models/subject-model')
+const { GPA, GRADE } = require('../utils/gpaGrade')
 
 const studentMarks = async (req, res, next) => {
   console.log(req.body, '6')
@@ -66,80 +67,6 @@ const studentMarks = async (req, res, next) => {
     } catch (err) {
       console.log(err, '67')
     }
-  }
-
-  // modifiedUserArray.map(user => {
-  //   const cgpa = user.mids + user.finals
-  //   user.gpa = cgpa
-  // })
-
-  // res.status(200).send({ message: 'success', type: 'marks' })
-}
-
-function calculateGPA(total) {
-  if (total >= 90) {
-    return 4
-  } else if (total >= 86) {
-    return 3.9
-  } else if (total >= 83) {
-    return 3.8
-  } else if (total >= 80) {
-    return 3.7
-  } else if (total >= 79) {
-    return 3.6
-  } else if (total >= 78) {
-    return 3.5
-  } else if (total >= 77) {
-    return 3.4
-  } else if (total >= 75) {
-    return 3.3
-  } else if (total >= 74) {
-    return 3.2
-  } else if (total >= 72) {
-    return 3.1
-  } else if (total >= 70) {
-    return 3.0
-  } else if (total >= 69) {
-    return 2.9
-  } else if (total >= 67) {
-    return 2.8
-  } else if (total >= 65) {
-    return 2.7
-  } else if (total >= 64) {
-    return 2.6
-  } else if (total >= 63) {
-    return 2.5
-  } else if (total >= 61) {
-    return 2.4
-  } else if (total >= 60) {
-    return 2.3
-  } else if (total >= 56) {
-    return 2.2
-  } else if (total >= 53) {
-    return 2.1
-  } else if (total >= 50) {
-    return 2.0
-  } else {
-    return 0.0
-  }
-}
-function calculateGrade(total) {
-  if (total >= 90) {
-    return 'A+'
-  } else if (total >= 80) {
-    return 'A'
-  } else if (total >= 75) {
-    return 'B+'
-  } else if (total >= 70) {
-    return 'B'
-  } else if (total >= 65) {
-    return 'B-'
-  } else if (total >= 60) {
-    return 'C+'
-  } else if (total >= 50) {
-    return 'C'
-  } else {
-    return 'F'
   }
 }
 
@@ -255,8 +182,8 @@ const markMarksList = async (req, res, next) => {
             (parseFloat(theory_total) * parseFloat(theory_hours) +
               parseFloat(lab_total) * parseFloat(lab_hours)) /
             (parseFloat(theory_hours) + parseFloat(lab_hours))
-          const gpa = calculateGPA(total)
-          const grade = calculateGrade(total)
+          const gpa = GPA(total)
+          const grade = GRADE(gpa)
 
           // console.log(item.mids, item.finals, item.sessional, item.student)
 
@@ -338,8 +265,8 @@ const markMarksList = async (req, res, next) => {
             (parseFloat(theory_total) * parseFloat(theory_hours) +
               parseFloat(lab_total) * parseFloat(lab_hours)) /
             (parseFloat(theory_hours) + parseFloat(lab_hours))
-          gpa = calculateGPA(total)
-          grade = calculateGrade(total)
+          gpa = GPA(total)
+          grade = GRADE(gpa)
         }
         console.log(item)
 
@@ -403,8 +330,8 @@ const updateMarkList = async (req, res) => {
           (parseFloat(theory_total) * parseFloat(theory_hours) +
             parseFloat(lab_total) * parseFloat(lab_hours)) /
           (parseFloat(theory_hours) + parseFloat(lab_hours))
-        gpa = calculateGPA(total)
-        grade = calculateGrade(total)
+        gpa = GPA(total)
+        grade = GRADE(gpa)
       }
 
       // console.log(item.mids, item.finals, item.sessional, item.student)
