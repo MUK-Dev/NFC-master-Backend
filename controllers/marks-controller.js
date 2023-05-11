@@ -57,11 +57,11 @@ const studentMarks = async (req, res, next) => {
         rollNo: user.rollNo,
         name: user.name,
         avatar: user.avatar,
-        mids: 0,
-        sessional: 0,
-        finals: 0,
-        lab_final: 0,
-        lab_sessional: 0,
+        mids: '',
+        sessional: '',
+        finals: '',
+        lab_final: '',
+        lab_sessional: '',
       }))
 
       return res.send(modifiedUserArray)
@@ -263,8 +263,13 @@ const markMarksList = async (req, res, next) => {
           '3rd',
           theory_hours === '0',
         )
+        if (lab_hours === '0') {
+          item.lab_final = 0
+          item.lab_sessional = 0
+        }
+        console.log('270', item.lab_final, item.lab_sessional)
         if (
-          (item.mids > 0 && item.lab_final > 0) ||
+          (!(item.mids === '') && !(item.lab_final === '')) ||
           lab_hours === '0' ||
           theory_hours === '0'
         ) {
