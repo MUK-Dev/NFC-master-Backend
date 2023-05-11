@@ -251,28 +251,17 @@ const markMarksList = async (req, res, next) => {
         let lab_total = 0
         let gpa = 0
         let grade = 'F'
-        console.log(
-          'line: 254',
-          '1st',
-          item.mids,
-          item.lab_final,
-          item.mids > 0 && item.lab_final > 0,
-          '2nd',
-          lab_hours,
-          lab_hours === '0',
-          '3rd',
-          theory_hours === '0',
-        )
         if (lab_hours === '0') {
           item.lab_final = 0
           item.lab_sessional = 0
         }
+        if (theory_hours === '0') {
+          item.mids = 0
+          item.finals = 0
+          item.sessional = 0
+        }
         console.log('270', item.lab_final, item.lab_sessional)
-        if (
-          (!(item.mids === '') && !(item.lab_final === '')) ||
-          lab_hours === '0' ||
-          theory_hours === '0'
-        ) {
+        if (!(item.mids === '') && !(item.lab_final === '')) {
           theory_total =
             parseFloat(item.mids) +
             parseFloat(item.finals) +
@@ -334,11 +323,16 @@ const updateMarkList = async (req, res) => {
       let lab_total = 0
       let gpa = 0
       let grade = 'F'
-      if (
-        !(item.mids === '' && item.lab_final === '') ||
-        lab_hours === '0' ||
-        theory_hours === '0'
-      ) {
+      if (lab_hours === '0') {
+        item.lab_final = 0
+        item.lab_sessional = 0
+      }
+      if (theory_hours === '0') {
+        item.mids = 0
+        item.finals = 0
+        item.sessional = 0
+      }
+      if (!(item.mids === '') && !(item.lab_final === '')) {
         theory_total =
           parseFloat(item.mids) +
           parseFloat(item.finals) +
