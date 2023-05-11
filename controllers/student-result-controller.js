@@ -44,7 +44,24 @@ const studentAllResult = async (req, res, next) => {
     }
 
     const semesterResult = {}
+    const overallResult = {}
+    const resultArray = {
+      cGPA: 0,
+      cGrade: 'F',
+      pcGPA: 0,
+      pcGrade: 'F',
+      overall_hours: 0,
+      overall_total: 0,
+    }
     Object.keys(resultsBySemester)?.map((row, i) => {
+      const overallArray = {
+        cGPA: resultArray.cGPA,
+        cGrade: resultArray.cGrade,
+        pcGPA: resultArray.pcGPA,
+        pcGrade: resultArray.pcGrade,
+        overall_hours: resultArray.overall_hours,
+        overall_total: resultArray.overall_total,
+      }
       const semesterArray = {
         sGPA: 0,
         sGrade: 'F',
@@ -54,6 +71,7 @@ const studentAllResult = async (req, res, next) => {
       for (let result of resultsBySemester[row]) {
         if (!semesterResult[row]) {
           semesterResult[row] = []
+          overallResult[row] = []
         }
         semesterArray.semester_total = (
           parseFloat(semesterArray.semester_total) +
@@ -72,14 +90,44 @@ const studentAllResult = async (req, res, next) => {
       ).toFixed(2)
       semesterArray.sGrade = GRADE(semesterArray.sGPA)
       semesterResult[row] = semesterArray
+
+      overallArray.pcGPA = overallArray.cGPA
+      overallArray.pcGrade = overallArray.cGrade
+      overallArray.overall_total = (
+        parseFloat(overallArray.overall_total) +
+        parseFloat(semesterArray.semester_total)
+      ).toFixed(2)
+      overallArray.overall_hours = (
+        parseFloat(overallArray.overall_hours) +
+        parseFloat(semesterArray.semester_hours)
+      ).toFixed(2)
+      overallArray.cGPA = (
+        parseFloat(overallArray.overall_total) /
+        parseFloat(overallArray.overall_hours)
+      ).toFixed(2)
+      overallArray.cGrade = GRADE(overallArray.cGPA)
+
+      console.log('101', row)
+      console.log('102', resultArray)
+
+      overallResult[row] = overallArray
+
+      resultArray.cGPA = overallArray.cGPA
+      resultArray.cGrade = overallArray.cGrade
+      resultArray.pcGPA = overallArray.pcGPA
+      resultArray.pcGrade = overallArray.pcGrade
+      resultArray.overall_hours = overallArray.overall_hours
+      resultArray.overall_total = overallArray.overall_total
     })
 
-    console.log('71', semesterResult)
+    console.log('106', overallResult)
+    console.log('107', semesterResult)
 
     console.log('Result Sheet')
     res.status(200).send({
       result: semesterResult,
       detailResult: resultsBySemester,
+      overall: overallResult,
     })
   } catch (err) {
     console.log(err)
