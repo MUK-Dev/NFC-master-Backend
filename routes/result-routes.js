@@ -3,6 +3,7 @@ const express = require('express')
 const {
   getAllResultSheets,
   findResultSheetById,
+  generateClassResultReport,
 } = require('../controllers/result-controller')
 const isAuth = require('../middleware/isAuth')
 
@@ -53,5 +54,9 @@ const router = express.Router()
 router.route('/api/result-sheets').get(isAuth, getAllResultSheets)
 
 router.route('/api/result-sheet/:sheetId').get(isAuth, findResultSheetById)
+
+router
+  .route('/api/result/subject-report')
+  .post(isAuth, generateClassResultReport)
 
 module.exports = router
