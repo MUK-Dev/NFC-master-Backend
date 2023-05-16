@@ -99,7 +99,7 @@ const generateSubjectReport = async (req, res) => {
         .send({ message: 'No records found', type: 'sheets' })
     }
 
-    const tableColumn = ['ID', 'Name']
+    const tableColumn = ['ID', 'Name', 'Roll no']
     const tableRows = []
 
     for (let i = 0; i < sheets.length; i++) {
@@ -114,7 +114,8 @@ const generateSubjectReport = async (req, res) => {
         if (!!!tableRows[j])
           tableRows[j] = [
             attendanceRecords[j].student._id,
-            `${attendanceRecords[j].student.name} - ${attendanceRecords[j].student.rollNo}`,
+            attendanceRecords[j].student.name,
+            attendanceRecords[j].student.rollNo,
             attendanceRecords[j].leave
               ? 'L'
               : attendanceRecords[j].present
