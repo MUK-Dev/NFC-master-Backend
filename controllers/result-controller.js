@@ -91,7 +91,10 @@ const generateClassResultReport = async (req, res) => {
 
     for (let j = 0; j < classResultRecords.length; j++) {
       if (!!!tableRows[j]) {
-        if (sheet.subject.theory_hours === '0') {
+        if (
+          sheet.subject.theory_hours === '0' &&
+          !(sheet.subject.lab_hours === '0')
+        ) {
           tableRows[j] = [
             j + 1,
             `${sheet.session.session_title}-${sheet.program.program_abbreviation}-${classResultRecords[j].student.rollNo}`,
@@ -104,7 +107,10 @@ const generateClassResultReport = async (req, res) => {
             classResultRecords[j].gpa,
             classResultRecords[j].grade,
           ]
-        } else if (sheet.subject.lab_hours === '0') {
+        } else if (
+          sheet.subject.lab_hours === '0' &&
+          !(sheet.subject.theory_hours === '0')
+        ) {
           tableRows[j] = [
             j + 1,
             `${sheet.session.session_title}-${sheet.program.program_abbreviation}-${classResultRecords[j].student.rollNo}`,
