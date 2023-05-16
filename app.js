@@ -29,6 +29,7 @@ class ExpressApp {
     this.app = express()
     this.app.use(express.json())
     this.app.use(cors())
+    console.clear()
     this.app.use(
       expressWinston.logger({
         transports: [new winston.transports.Console()],
