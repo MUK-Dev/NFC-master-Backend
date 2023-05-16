@@ -17,6 +17,22 @@ const mongoose = require('mongoose')
  *          type: number
  *        lng:
  *          type: number
+ *    UpdateDepartmentRequest:
+ *      type: object
+ *      properties:
+ *        department_name:
+ *          type: string
+ *        department_abbreviation:
+ *          type: string
+ *        no_of_programs:
+ *          type: string
+ *        location:
+ *          type: object
+ *          properties:
+ *            lat:
+ *              type: number
+ *            lng:
+ *              type: number
  *    RegisterDepartmentResponse:
  *      type: object
  *      properties:
