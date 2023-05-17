@@ -15,6 +15,24 @@ const registerSection = async (req, res) => {
     }
   }
 
+  try {
+    const existingSections = await Model.find({
+      section_title,
+      department,
+      program,
+      session,
+    })
+    if (existingSections.length > 0)
+      return res.status(404).send({
+        message: 'This section is already registered in this department',
+        type: 'section',
+      })
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'server' })
+  }
+
   const section = Model({
     section_title,
     department,
@@ -66,8 +84,43 @@ const getAllSection = async (req, res) => {
   }
 }
 
+const getSectionById = async (req, res) => {
+  const { sectionId } = req.params
+  try {
+    const data = await Model.findById(sectionId)
+    if (!data)
+      return res
+        .status(404)
+        .send({ message: 'Could not find any section', type: 'section' })
+    res.status(200).send(data)
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'section' })
+  }
+}
+
+const updateSection = async (req, res) => {
+  const { sectionId } = req.params
+  const { _id, ...rest } = req.body
+
+  try {
+    await Model.findOneAndReplace({ _id: sectionId }, { ...rest })
+    return res
+      .status(200)
+      .send({ message: 'Successfully updated', type: 'section' })
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'section' })
+  }
+}
+
 module.exports = {
   registerSection,
   getAllDependentSections,
   getAllSection,
+  getSectionById,
+  updateSection,
 }

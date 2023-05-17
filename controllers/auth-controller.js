@@ -403,7 +403,9 @@ const login = async (req, res, next) => {
 const getUser = async (req, res, next) => {
   let user
   try {
-    user = await Student.findById(req.userInfo.tokenUser.id).select('-password')
+    user = await Student.findById(req.userInfo.tokenUser.id)
+      .select('-password')
+      .populate('program')
     if (!user)
       user = await Parent.findById(req.userInfo.tokenUser.id).select(
         '-password',

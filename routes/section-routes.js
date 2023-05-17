@@ -4,6 +4,8 @@ const {
   registerSection,
   getAllDependentSections,
   getAllSection,
+  getSectionById,
+  updateSection,
 } = require('../controllers/section-controller')
 const isAuth = require('../middleware/isAuth')
 
@@ -82,6 +84,59 @@ const isAuth = require('../middleware/isAuth')
  *        description: Invalid request
  *       500:
  *        description: Something went wrong (Server error)
+ * /api/sections/{sectionId}:
+ *  get:
+ *     tags:
+ *     - Sections
+ *     description: Returns section by Id
+ *     parameters:
+ *       - in: path
+ *         name: sectionId
+ *         schema:
+ *           type: string
+ *         required: true
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Section'
+ *       401:
+ *        description: Unauthorized
+ *       404:
+ *        description: Invalid request
+ *       500:
+ *        description: Something went wrong (Server error)
+ *  put:
+ *     tags:
+ *     - Sections
+ *     description: Returns section by Id
+ *     parameters:
+ *       - in: path
+ *         name: sectionId
+ *         schema:
+ *           type: string
+ *         required: true
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schemas/RegisterSectionRequest'
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Section'
+ *       401:
+ *        description: Unauthorized
+ *       404:
+ *        description: Invalid request
+ *       500:
+ *        description: Something went wrong (Server error)
  */
 
 const router = express.Router()
@@ -92,5 +147,10 @@ router
   .post(isAuth, registerSection)
 
 router.route('/api/all-sections').get(getAllSection)
+
+router
+  .route('/api/sections/:sectionId')
+  .get(isAuth, getSectionById)
+  .put(isAuth, updateSection)
 
 module.exports = router

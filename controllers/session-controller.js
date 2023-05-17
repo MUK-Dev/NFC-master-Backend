@@ -29,6 +29,7 @@ const registerSession = async (req, res, next) => {
     const existingSessions = await Model.find({
       session_title,
       department,
+      program,
       type,
     })
     if (existingSessions.length > 0)
