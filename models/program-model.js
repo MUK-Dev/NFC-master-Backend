@@ -15,10 +15,20 @@ const mongoose = require('mongoose')
  *          type: string
  *        starting:
  *          type: string
- *          format: date-time 
+ *          format: date-time
+ *        ending:
+ *          type: string
+ *          format: date-time
  *        department:
  *          type: string
  *          format: uuid
+ *    GeneralResponse:
+ *      type: object
+ *      properties:
+ *        message:
+ *          type: string
+ *        type:
+ *          type: string
  *    RegisterProgramResponse:
  *      type: object
  *      properties:
@@ -44,6 +54,9 @@ const mongoose = require('mongoose')
  *        starting:
  *          type: string
  *          format: date-time
+ *        ending:
+ *          type: string
+ *          format: date-time
  *        department:
  *          type: string
  *          default: Department
@@ -63,6 +76,7 @@ const programSchema = mongoose.Schema(
     program_abbreviation: String,
     type: String,
     starting: Date,
+    ending: Date,
     department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
     change_history: [],
   },

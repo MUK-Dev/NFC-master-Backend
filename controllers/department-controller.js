@@ -86,21 +86,6 @@ const updateDepartment = async (req, res) => {
   const { _id, ...rest } = req.body
 
   try {
-    const existingDepartment = await Model.find({
-      department_name: rest.department_name,
-    })
-    if (existingDepartment.length > 0)
-      return res.status(404).send({
-        message: 'Another department is already registered by this name',
-        type: 'department',
-      })
-  } catch (err) {
-    return res
-      .status(500)
-      .send({ message: 'Something went wrong', type: 'server' })
-  }
-
-  try {
     await Model.findOneAndReplace({ _id: departmentId }, { ...rest })
     return res
       .status(200)

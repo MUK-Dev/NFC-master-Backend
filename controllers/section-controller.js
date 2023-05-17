@@ -36,7 +36,7 @@ const registerSection = async (req, res) => {
   }
 }
 
-const getAllSections = async (req, res, next) => {
+const getAllDependentSections = async (req, res, next) => {
   try {
     const data = await Model.find({
       department: req.query.department,
@@ -51,7 +51,23 @@ const getAllSections = async (req, res, next) => {
   }
 }
 
+const getAllSection = async (req, res) => {
+  try {
+    const data = await Model.find().populate([
+      'department',
+      'program',
+      'session',
+    ])
+    res.status(200).send(data)
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'sections' })
+  }
+}
+
 module.exports = {
   registerSection,
-  getAllSections,
+  getAllDependentSections,
+  getAllSection,
 }

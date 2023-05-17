@@ -2,7 +2,8 @@ const express = require('express')
 
 const {
   registerSection,
-  getAllSections,
+  getAllDependentSections,
+  getAllSection,
 } = require('../controllers/section-controller')
 const isAuth = require('../middleware/isAuth')
 
@@ -12,7 +13,7 @@ const isAuth = require('../middleware/isAuth')
  *  get:
  *     tags:
  *     - Sections
- *     description: Returns all registered sections
+ *     description: Returns all registered sections under department, program and session
  *     parameters:
  *       - in: query
  *         name: department
@@ -63,10 +64,33 @@ const isAuth = require('../middleware/isAuth')
  *        description: Invalid request
  *       500:
  *        description: Something went wrong (Server error)
+ * /api/all-sections:
+ *  get:
+ *     tags:
+ *     - Sections
+ *     description: Returns all registered sections
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/AllSectionsResponse'
+ *       401:
+ *        description: Unauthorized
+ *       404:
+ *        description: Invalid request
+ *       500:
+ *        description: Something went wrong (Server error)
  */
 
 const router = express.Router()
 
-router.route('/api/sections').get(getAllSections).post(isAuth, registerSection)
+router
+  .route('/api/sections')
+  .get(getAllDependentSections)
+  .post(isAuth, registerSection)
+
+router.route('/api/all-sections').get(getAllSection)
 
 module.exports = router
