@@ -1,5 +1,5 @@
 const Model = require('../models/subject-model')
-const Teacher = require('../models/subject-teachers-model')
+const { Teacher } = require('../models/user-models')
 
 const registerSubject = async (req, res, next) => {
   const {
