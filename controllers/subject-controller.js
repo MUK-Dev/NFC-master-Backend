@@ -99,6 +99,7 @@ const getSubject = async (req, res) => {
       'subjects.subject': { $in: subjectIds },
     })
     console.log(teachers)
+    return res.status(200).send(teachers)
   } catch (err) {
     console.log(err)
     return res
