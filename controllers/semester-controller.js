@@ -77,6 +77,7 @@ const getSemester = async (req, res) => {
         today.isBefore(moment(new Date(row.ending))),
     )
     const semester_title = parseInt(selectedSemester.semester_title)
+    const semester_id = selectedSemester._id
     const totalDays = moment(new Date(selectedSemester.ending)).diff(
       new Date(selectedSemester.starting),
       'day',
@@ -88,6 +89,7 @@ const getSemester = async (req, res) => {
     const percentage = parseInt((pastDays / totalDays) * 100)
 
     return res.send({
+      semester_id: semester_id,
       semester_title: semester_title,
       percentage: percentage,
       ending: moment(new Date(selectedSemester.ending)),
