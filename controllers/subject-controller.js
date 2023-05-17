@@ -94,10 +94,8 @@ const getSubject = async (req, res) => {
   try {
     const subjects = await Model.find({ semester: req.body.semesterId })
     const subjectData = []
-    const subjectIds = subjects.map(s => s._id)
-    const teachers = await Teacher.find({
-      'subjects.subject': { $in: subjectIds },
-    })
+    const teachers = await Teacher.find({ 'subjects.subject': subjects[0]._id })
+
     console.log(teachers)
     return res.status(200).send(teachers)
   } catch (err) {
