@@ -17,6 +17,19 @@ const registerDepartment = async (req, res, next) => {
     }
   }
 
+  try {
+    const existingDepartment = await Model.find({ department_name })
+    if (existingDepartment.length > 0)
+      return res.status(404).send({
+        message: 'Another department is already registered by this name',
+        type: 'department',
+      })
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'server' })
+  }
+
   const department = Model({
     department_name,
     department_abbreviation,
@@ -51,7 +64,58 @@ const getAllDepartments = async (req, res, next) => {
   }
 }
 
+const getDepartmentById = async (req, res) => {
+  const { departmentId } = req.params
+
+  try {
+    const data = await Model.findById(departmentId)
+    if (!data)
+      return res
+        .status(404)
+        .send({ message: 'Could not find any department', type: 'department' })
+    return res.status(200).send(data)
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'department' })
+  }
+}
+
+const updateDepartment = async (req, res) => {
+  const { departmentId } = req.params
+  const { _id, ...rest } = req.body
+
+  try {
+    const existingDepartment = await Model.find({
+      department_name: rest.department_name,
+    })
+    if (existingDepartment.length > 0)
+      return res.status(404).send({
+        message: 'Another department is already registered by this name',
+        type: 'department',
+      })
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'server' })
+  }
+
+  try {
+    await Model.findOneAndReplace({ _id: departmentId }, { ...rest })
+    return res
+      .status(200)
+      .send({ message: 'Successfully updated', type: 'department' })
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'department' })
+  }
+}
+
 module.exports = {
   registerDepartment,
   getAllDepartments,
+  getDepartmentById,
+  updateDepartment,
 }
