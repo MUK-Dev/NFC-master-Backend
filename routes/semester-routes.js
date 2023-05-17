@@ -3,6 +3,7 @@ const express = require('express')
 const {
   registerSemester,
   getAllSemesters,
+  getSemester,
 } = require('../controllers/semester-controller')
 const isAuth = require('../middleware/isAuth')
 
@@ -71,5 +72,7 @@ router
   .route('/api/semesters')
   .get(getAllSemesters)
   .post(isAuth, registerSemester)
+
+router.route('/api/student/semester').post(isAuth, getSemester)
 
 module.exports = router

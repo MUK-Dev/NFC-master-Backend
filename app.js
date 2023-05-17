@@ -16,7 +16,7 @@ const subjectTeachersRoutes = require('./routes/subject-teachers-routes')
 const studentRoutes = require('./routes/student-routes')
 const parentRoutes = require('./routes/parent-routes')
 const attendanceRoutes = require('./routes/attendance-routes')
-const studentmarksRoutes = require('./routes/marks-routes')
+const studentMarksRoutes = require('./routes/marks-routes')
 const sectionRoutes = require('./routes/section-routes')
 const sheetRoutes = require('./routes/sheet-routes')
 const resultSheetRoutes = require('./routes/result-routes')
@@ -98,7 +98,7 @@ class ExpressApp {
     this.app.use(sheetRoutes)
 
     //? === Student Marks Routes ===
-    this.app.use(studentmarksRoutes)
+    this.app.use(studentMarksRoutes)
 
     //? === Student Marks Routes ===
     this.app.use(resultSheetRoutes)
