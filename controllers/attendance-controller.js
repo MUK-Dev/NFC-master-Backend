@@ -59,7 +59,6 @@ const markAttendanceList = async (req, res) => {
   }
 
   for (let item of list) {
-    console.log(item)
     const singleStudentAttendance = Attendance({
       ...item,
       sheet: sheet._id,
@@ -196,7 +195,6 @@ const getAttendanceChartData = async (req, res) => {
         $lt: moment().toDate(),
       },
     }).sort({ date: 1 })
-    console.log(data.length)
     let modifiedData = []
     let key = 'date'
 
@@ -259,7 +257,6 @@ const getAttendanceCalendarData = async (req, res) => {
 
 const getStudentCalendarData = async (req, res) => {
   const { studentId } = req.params
-  console.log(studentId)
   try {
     const data = await Attendance.find({
       student: studentId,

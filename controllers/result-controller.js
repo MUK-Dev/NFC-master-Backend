@@ -17,8 +17,6 @@ const getAllResultSheets = async (req, res) => {
         'semester',
         'subject',
       ])
-    console.log('Get all result Sheet')
-    console.log(resultSheets)
     res.status(200).send(resultSheets)
   } catch (err) {
     console.log(err)
@@ -27,7 +25,6 @@ const getAllResultSheets = async (req, res) => {
 }
 
 const findResultSheetById = async (req, res) => {
-  console.log(req.params.sheetId)
   try {
     const resultSheet = await MarkSheet.findById(req.params.sheetId).populate([
       'department',

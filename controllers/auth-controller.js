@@ -45,8 +45,6 @@ const registerStudent = async (req, res) => {
 
   const avatarHash = createAvatarHash(email)
 
-  console.log(email)
-
   if (gender)
     avatar = `https://avatars.dicebear.com/api/${gender}/:${avatarHash}.svg`
   else avatar = `https://avatars.dicebear.com/api/bottts/:${avatarHash}.svg`

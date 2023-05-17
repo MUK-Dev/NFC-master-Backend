@@ -4,23 +4,19 @@ const Subject = require('../models/subject-model')
 const { GPA, GRADE } = require('../utils/gpaGrade')
 
 const studentMarks = async (req, res, next) => {
-  console.log(req.body, '6')
   const count = await MarkSheet.countDocuments({
     subject: req.body.subject,
     section: req.body.section,
   })
-  console.log(count, '11')
   if (count > 0) {
     try {
       const markList = await MarkSheet.findOne({
         subject: req.body.subject,
         section: req.body.section,
       })
-      console.log(markList._id, '18')
       const studentMarkList = await StudentMark.find({
         markSheet: markList._id,
       }).populate('student')
-      console.log(studentMarkList, '23')
 
       const modifiedUserArray = studentMarkList.map(user => ({
         _id: user.student._id,
@@ -40,7 +36,7 @@ const studentMarks = async (req, res, next) => {
 
       return res.send(modifiedUserArray)
     } catch (err) {
-      console.log(err, '41')
+      console.log(err)
     }
   } else {
     try {
@@ -66,7 +62,7 @@ const studentMarks = async (req, res, next) => {
 
       return res.send(modifiedUserArray)
     } catch (err) {
-      console.log(err, '67')
+      console.log(err)
     }
   }
 }
@@ -97,7 +93,6 @@ const markMarksList = async (req, res, next) => {
     date,
     list,
   }
-  console.log(req.body, '172')
 
   for (let val in required) {
     if (!required[val]) {
@@ -115,7 +110,6 @@ const markMarksList = async (req, res, next) => {
     subject,
     section,
   })
-  // console.log(theory_count, lab_count)
   if (theory_count > 0 || lab_count > 0) {
     return res
       .status(500)
@@ -125,23 +119,16 @@ const markMarksList = async (req, res, next) => {
       subject: req.body.subject,
       section: req.body.section,
     })
-    // console.log('first else', count)
     if (count > 0) {
-      console.log('2nd if')
       const markList = await MarkSheet.findOne({
         subject: req.body.subject,
         section: req.body.section,
       })
-      console.log('207', markList)
-
       try {
         const listStudent = await StudentMark.findOne({
           markSheet: markList._id,
         })
-        console.log('213', listStudent)
-        console.log(214, listStudent.lab_final)
         if (listStudent.lab_final) {
-          console.log(216, listStudent.lab_final)
           await MarkSheet.updateOne(
             {
               _id: markList._id,
@@ -186,8 +173,6 @@ const markMarksList = async (req, res, next) => {
           const gpa = GPA(total)
           const grade = GRADE(gpa)
 
-          // console.log(item.mids, item.finals, item.sessional, item.student)
-
           await StudentMark.updateOne(
             {
               markSheet: markList._id,
@@ -217,7 +202,6 @@ const markMarksList = async (req, res, next) => {
       }
 
       res.status(200).send({ message: 'Result Marked', type: 'mark-result' })
-      console.log('Here 278')
     } else {
       const markSheet = MarkSheet({
         theory_teacher,
@@ -233,7 +217,6 @@ const markMarksList = async (req, res, next) => {
 
       try {
         await markSheet.save()
-        console.log('sheet saved')
       } catch (err) {
         console.log(err)
         return res
@@ -260,7 +243,6 @@ const markMarksList = async (req, res, next) => {
           item.finals = 0
           item.sessional = 0
         }
-        console.log('270', item.lab_final, item.lab_sessional)
         if (!(item.mids === '') && !(item.lab_final === '')) {
           theory_total =
             parseFloat(item.mids) +
@@ -275,7 +257,6 @@ const markMarksList = async (req, res, next) => {
           gpa = GPA(total)
           grade = GRADE(gpa)
         }
-        console.log(item)
 
         const singleStudentMarks = StudentMark({
           ...item,
@@ -288,7 +269,6 @@ const markMarksList = async (req, res, next) => {
         })
         try {
           await singleStudentMarks.save()
-          console.log('mark Saved')
         } catch (err) {
           console.log(err)
           return res
@@ -308,15 +288,11 @@ const markMarksList = async (req, res, next) => {
 
 const updateMarkList = async (req, res) => {
   const { subject, list } = req.body
-  console.log('373', list)
 
   try {
     const selectedSubject = await Subject.findById(subject)
     const theory_hours = selectedSubject.theory_hours
     const lab_hours = selectedSubject.lab_hours
-    if (lab_hours === '3') {
-      console.log('line 380 3 entered')
-    }
     for (let item of list) {
       let total = 0
       let theory_total = 0
@@ -345,8 +321,6 @@ const updateMarkList = async (req, res) => {
         gpa = GPA(total)
         grade = GRADE(gpa)
       }
-
-      // console.log(item.mids, item.finals, item.sessional, item.student)
 
       await StudentMark.updateOne(
         {

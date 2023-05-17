@@ -34,7 +34,6 @@ const findSheetById = async (req, res) => {
     const attendanceList = await Attendance.find({ sheet: sheet._id }).populate(
       'student',
     )
-    console.log(attendanceList)
 
     res.status(200).send({
       sheet,
