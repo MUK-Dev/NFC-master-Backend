@@ -59,7 +59,18 @@ const generateClassResultReport = async (req, res) => {
   try {
     const sheet = await MarkSheet.findById({
       _id: sheetId,
-    }).populate(['subject', 'theory_teacher', 'session', 'program'])
+    }).populate(['semester', 'theory_teacher', 'subject', 'program', 'session'])
+    const values = {
+      semester_title: sheet.semester.semester_title,
+      session_title: sheet.session.session_title,
+      session_start: sheet.session.starting_year,
+      session_end: sheet.session.ending_year,
+      program_title: sheet.program.program_title,
+      program_abbreviation: sheet.program.program_abbreviation,
+      subject_code: sheet.subject.subject_code,
+      subject_name: sheet.subject.subject_title,
+      teacher_name: sheet.theory_teacher.name,
+    }
 
     const tableColumn = ['Sr.', 'Roll No.', 'Name']
     const tableRows = []
@@ -144,10 +155,9 @@ const generateClassResultReport = async (req, res) => {
       } else tableRows[j].push('null')
     }
     return res.send({
+      values,
       tableColumn,
       tableRows,
-      subject_name: sheet.subject.subject_title,
-      teacher_name: sheet.theory_teacher.name,
     })
   } catch (err) {
     console.log(err)

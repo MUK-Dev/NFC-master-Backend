@@ -29,7 +29,6 @@ const studentAllResult = async (req, res, next) => {
       subject_lab: data.markSheet.subject.lab_hours,
       theory_teacher: data.markSheet.theory_teacher.name,
     }))
-    console.log('29', modifiedResultArray)
 
     const resultsBySemester = {}
     if (modifiedResultArray) {
@@ -39,8 +38,6 @@ const studentAllResult = async (req, res, next) => {
         }
         resultsBySemester[result.semester_title].push(result)
       }
-
-      console.log('43', resultsBySemester)
     }
 
     const semesterResult = {}
@@ -107,9 +104,6 @@ const studentAllResult = async (req, res, next) => {
       ).toFixed(2)
       overallArray.cGrade = GRADE(overallArray.cGPA)
 
-      console.log('101', row)
-      console.log('102', resultArray)
-
       overallResult[row] = overallArray
 
       resultArray.cGPA = overallArray.cGPA
@@ -119,11 +113,6 @@ const studentAllResult = async (req, res, next) => {
       resultArray.overall_hours = overallArray.overall_hours
       resultArray.overall_total = overallArray.overall_total
     })
-
-    console.log('106', overallResult)
-    console.log('107', semesterResult)
-
-    console.log('Result Sheet')
     res.status(200).send({
       result: semesterResult,
       detailResult: resultsBySemester,
@@ -141,8 +130,16 @@ const studentPDFResult = async (req, res, next) => {
       student: req.userInfo.tokenUser.id,
     }).populate({
       path: 'markSheet',
-      populate: ['semester', 'theory_teacher', 'subject'],
+      populate: ['semester', 'theory_teacher', 'subject', 'program', 'session'],
     })
+    const values = {
+      session_title: studentResult[0].markSheet.session.session_title,
+      session_start: studentResult[0].markSheet.session.starting_year,
+      session_end: studentResult[0].markSheet.session.ending_year,
+      program_title: studentResult[0].markSheet.program.program_title,
+      program_abbreviation:
+        studentResult[0].markSheet.program.program_abbreviation,
+    }
 
     const modifiedResultArray = studentResult.map(data => ({
       _id: data._id,
@@ -163,7 +160,6 @@ const studentPDFResult = async (req, res, next) => {
       subject_lab: data.markSheet.subject.lab_hours,
       theory_teacher: data.markSheet.theory_teacher.name,
     }))
-    console.log('29', modifiedResultArray)
 
     const resultsBySemester = {}
     if (modifiedResultArray) {
@@ -173,8 +169,6 @@ const studentPDFResult = async (req, res, next) => {
         }
         resultsBySemester[result.semester_title].push(result)
       }
-
-      console.log('43', resultsBySemester)
     }
 
     const tableColumn = {}
@@ -289,6 +283,7 @@ const studentPDFResult = async (req, res, next) => {
 
     console.log('Student Result PDF')
     res.status(200).send({
+      values,
       tableColumn,
       tableRows,
     })
