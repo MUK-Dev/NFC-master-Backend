@@ -1,4 +1,5 @@
 const Model = require('../models/subject-model')
+const Teacher = require('../models/subject-teachers-model')
 
 const registerSubject = async (req, res, next) => {
   const {
@@ -89,8 +90,26 @@ const getAllSubjects = async (req, res) => {
   }
 }
 
+const getSubject = async (req, res) => {
+  try {
+    const subjects = await Model.find({ semester: req.body.semesterId })
+    const subjectData = []
+    const subjectIds = subjects.map(s => s._id)
+    const teachers = await Teacher.find({
+      'subjects.subject': { $in: subjectIds },
+    })
+    console.log(teachers)
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(500)
+      .send({ type: 'server', message: 'Something went wrong' })
+  }
+}
+
 module.exports = {
   registerSubject,
   getAllSubjects,
   getAllSubjectsDependent,
+  getSubject,
 }

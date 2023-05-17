@@ -4,6 +4,7 @@ const {
   registerSubject,
   getAllSubjectsDependent,
   getAllSubjects,
+  getSubject,
 } = require('../controllers/subject-controller')
 const isAuth = require('../middleware/isAuth')
 
@@ -95,5 +96,7 @@ router
   .post(isAuth, registerSubject)
 
 router.route('/api/all-subjects').get(getAllSubjects)
+
+router.route('/api/student/subject').post(isAuth, getSubject)
 
 module.exports = router
