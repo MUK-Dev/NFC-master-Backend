@@ -281,7 +281,6 @@ const studentPDFResult = async (req, res, next) => {
       resultArray.overall_total = overallArray.overall_total
     })
 
-    console.log('Student Result PDF')
     res.status(200).send({
       values,
       tableColumn,

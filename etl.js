@@ -21,14 +21,12 @@ const { Sheet, Attendance } = require('./models/attendance-model')
     //   ).clone()
     // }
     // const attendanceDate = await Attendance.find({ sheet: sheets[0]._id })
-    // console.log(attendanceDate)
     // const data = await Attendance.deleteMany({
     //   date: {
     //     $gte: moment('2022-10-14').toDate(),
     //     $lt: moment('2022-10-15').toDate(),
     //   },
     // })
-    // console.log(data)
     const sheets = await Sheet.find({ teacher: '644e3b257dd225e87e6af597' })
     for (let sheet of sheets) {
       await Attendance.deleteMany({ sheet: sheet._id })

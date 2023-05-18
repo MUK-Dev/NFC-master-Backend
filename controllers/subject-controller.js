@@ -94,10 +94,21 @@ const getSubject = async (req, res) => {
   try {
     const subjects = await Model.find({ semester: req.body.semesterId })
     const subjectData = []
-    const teachers = await Teacher.find({ 'subjects.subject': subjects[0]._id })
 
-    console.log(teachers)
-    return res.status(200).send(teachers)
+    for (let j = 0; j < subjects.length; j++) {
+      const teacher = await Teacher.find({
+        'subjects.subject': subjects[j]._id,
+        'subjects.theory_hours': { $ne: ' ' },
+      })
+
+      subjectData[j] = {
+        title: subjects[j].subject_title,
+        teacher: teacher[0]?.name || null,
+        hours: `${subjects[j].theory_hours} + ${subjects[j].lab_hours}`,
+      }
+    }
+
+    return res.status(200).send(subjectData)
   } catch (err) {
     console.log(err)
     return res
