@@ -1,6 +1,5 @@
 const moment = require('moment')
 const Model = require('../models/semester-model')
-const HttpError = require('../utils/HttpError')
 
 const registerSemester = async (req, res, next) => {
   const {
@@ -28,6 +27,25 @@ const registerSemester = async (req, res, next) => {
     }
   }
 
+  try {
+    const existingSemester = await Model.find({
+      semester_title,
+      type,
+      department,
+      program,
+      session,
+    })
+    if (existingSemester.length > 0)
+      return res.status(404).send({
+        message: 'This section is already registered in this session',
+        type: 'semester',
+      })
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'server' })
+  }
+
   const semester = Model({
     semester_title,
     type,
@@ -52,7 +70,7 @@ const registerSemester = async (req, res, next) => {
   }
 }
 
-const getAllSemesters = async (req, res, next) => {
+const getAllDependentSemesters = async (req, res, next) => {
   try {
     const data = await Model.find({
       department: req.query.department,
@@ -102,8 +120,59 @@ const getSemester = async (req, res) => {
   }
 }
 
+const getAllSemesters = async (req, res) => {
+  try {
+    const data = await Model.find().populate([
+      'department',
+      'program',
+      'session',
+    ])
+    res.status(200).send(data)
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'semesters' })
+  }
+}
+
+const getSemesterById = async (req, res) => {
+  const { semesterId } = req.params
+  try {
+    const data = await Model.findById(semesterId)
+    if (!data)
+      return res
+        .status(404)
+        .send({ message: 'Could not find any semester', type: 'semester' })
+    res.status(200).send(data)
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'semester' })
+  }
+}
+
+const updateSemester = async (req, res) => {
+  const { semester } = req.params
+  const { _id, ...rest } = req.body
+
+  try {
+    await Model.findOneAndReplace({ _id: semester }, { ...rest })
+    return res
+      .status(200)
+      .send({ message: 'Successfully updated', type: 'semester' })
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'semester' })
+  }
+}
+
 module.exports = {
   registerSemester,
-  getAllSemesters,
+  getAllDependentSemesters,
   getSemester,
+  getAllSemesters,
+  getSemesterById,
+  updateSemester,
 }
