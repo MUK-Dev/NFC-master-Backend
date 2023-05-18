@@ -308,7 +308,7 @@ const updateMarkList = async (req, res) => {
         item.finals = 0
         item.sessional = 0
       }
-      if (!(item.mids === '') && !(item.lab_final === '')) {
+      if (!(item.mids === null) && !(item.lab_final === null)) {
         theory_total =
           parseFloat(item.mids) +
           parseFloat(item.finals) +
@@ -347,7 +347,7 @@ const updateMarkList = async (req, res) => {
     console.log(err)
     return res
       .status(500)
-      .send({ type: 'server', message: 'Something went wrong' })
+      .send({ type: 'server', message: 'Something went wrong update' })
   }
 
   res.status(200).send({ message: 'Marked attendance', type: 'mark-result' })
