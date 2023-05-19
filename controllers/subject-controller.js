@@ -31,6 +31,27 @@ const registerSubject = async (req, res, next) => {
     }
   }
 
+  try {
+    const existingSubjects = await Model.find({
+      subject_title,
+      type,
+      subject_code,
+      department,
+      program,
+      session,
+      semester,
+    })
+    if (existingSubjects.length > 0)
+      return res.status(404).send({
+        message: 'This subject is already registered in this semester',
+        type: 'subject',
+      })
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'server' })
+  }
+
   const subject = Model({
     subject_title,
     type,
@@ -92,7 +113,7 @@ const getAllSubjects = async (req, res) => {
 
 const getSubject = async (req, res) => {
   try {
-    const subjects = await Model.find({ semester: req.body.semesterId })
+    const subjects = await Model.find({ semester: req.body.subjectId })
     const subjectData = []
 
     for (let j = 0; j < subjects.length; j++) {
@@ -117,9 +138,44 @@ const getSubject = async (req, res) => {
   }
 }
 
+const getSubjectById = async (req, res) => {
+  const { subjectId } = req.params
+  try {
+    const data = await Model.findById(subjectId)
+    if (!data)
+      return res
+        .status(404)
+        .send({ message: 'Could not find any subject', type: 'subject' })
+    res.status(200).send(data)
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'subject' })
+  }
+}
+
+const updateSubject = async (req, res) => {
+  const { subjectId } = req.params
+  const { _id, ...rest } = req.body
+
+  try {
+    await Model.findOneAndReplace({ _id: subjectId }, { ...rest })
+    return res
+      .status(200)
+      .send({ message: 'Successfully updated', type: 'subject' })
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'subject' })
+  }
+}
+
 module.exports = {
   registerSubject,
   getAllSubjects,
   getAllSubjectsDependent,
   getSubject,
+  getSubjectById,
+  updateSubject,
 }
