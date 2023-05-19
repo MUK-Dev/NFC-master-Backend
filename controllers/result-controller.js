@@ -39,11 +39,11 @@ const findResultSheetById = async (req, res) => {
     }).populate('student')
 
     res.status(200).send({
-      resultSheet,
       list: resultList,
-      subject_Id: resultSheet.subject._id,
       session_title: resultSheet.session.session_title,
       program_abbreviation: resultSheet.program.program_abbreviation,
+      section_title: resultSheet.section.section_title,
+      subject_title: resultSheet.subject.subject_title,
     })
   } catch (err) {
     console.log(err)
