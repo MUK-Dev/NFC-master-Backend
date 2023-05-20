@@ -284,7 +284,7 @@ const registerAdmin = async (req, res) => {
   // !-------------------------------------------
 }
 
-//? === Register Admin ===
+//? === Register Teacher ===
 
 const registerTeacher = async (req, res) => {
   let avatar
@@ -317,7 +317,7 @@ const registerTeacher = async (req, res) => {
     })
   }
 
-  // ! Checking If Admin with same email already exists
+  // ! Checking If Teacher with same email already exists
   try {
     existingTeacher = await Teacher.findOne({ email: email })
   } catch (err) {
@@ -333,7 +333,7 @@ const registerTeacher = async (req, res) => {
   }
   //!-------------------------------------------------------
 
-  // !Creating New Admin
+  // !Creating New Teacher
   try {
     const user = Teacher({
       name,

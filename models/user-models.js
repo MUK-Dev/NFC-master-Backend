@@ -238,16 +238,6 @@ adminSchema.pre('save', async function (next) {
 
 teacherSchema.pre('save', async function (next) {
   try {
-    adminSchema.pre('save', async function (next) {
-      try {
-        if (!this.isModified('password')) return next()
-        const hashed = await bcrypt.hash(this['password'], 10)
-        this['password'] = hashed
-        return next()
-      } catch (err) {
-        return next(err)
-      }
-    })
     if (!this.isModified('password')) return next()
     const hashed = await bcrypt.hash(this['password'], 10)
     this['password'] = hashed

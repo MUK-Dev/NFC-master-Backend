@@ -20,6 +20,7 @@ const studentMarksRoutes = require('./routes/marks-routes')
 const sectionRoutes = require('./routes/section-routes')
 const sheetRoutes = require('./routes/sheet-routes')
 const resultSheetRoutes = require('./routes/result-routes')
+const teacherRoutes = require('./routes/teacher-routes')
 const studentResultRoutes = require('./routes/student-result-routes')
 
 const swaggerDocs = require('./utils/swagger')
@@ -102,6 +103,9 @@ class ExpressApp {
 
     //? === Student Marks Routes ===
     this.app.use(resultSheetRoutes)
+
+    //? === Teacher Routes ===
+    this.app.use(teacherRoutes)
 
     //? === Student Result Routes ===
     this.app.use(studentResultRoutes)
