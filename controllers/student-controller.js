@@ -5,7 +5,7 @@ const findStudents = async (req, res, next) => {
   try {
     const data = await Student.find({
       [req.body.type ? req.body.type : 'name']: query,
-    })
+    }).populate(['program', 'session'])
     res.send(data)
   } catch (err) {
     console.log(err)

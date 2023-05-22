@@ -405,7 +405,7 @@ const getUser = async (req, res, next) => {
   try {
     user = await Student.findById(req.userInfo.tokenUser.id)
       .select('-password')
-      .populate('program')
+      .populate(['program', 'session'])
     if (!user)
       user = await Parent.findById(req.userInfo.tokenUser.id).select(
         '-password',

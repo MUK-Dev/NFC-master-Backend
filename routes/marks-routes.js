@@ -3,6 +3,7 @@ const {
   studentMarks,
   updateMarkList,
   markMarksList,
+  repeaterMarkList,
 } = require('../controllers/marks-controller')
 
 const isAuth = require('../middleware/isAuth')
@@ -40,5 +41,9 @@ router.route('/api/marks').post(studentMarks)
 router.route('/api/marks/student').post(isAuth, markMarksList)
 
 router.route('/api/marks/student/:sheetId').patch(isAuth, updateMarkList)
+
+router
+  .route('/api/repeater_marks/student/:sheetId')
+  .post(isAuth, repeaterMarkList)
 
 module.exports = router
