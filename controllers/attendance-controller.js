@@ -90,7 +90,7 @@ const generateSubjectReport = async (req, res) => {
       teacher: req.userInfo.tokenUser.id,
     })
       .sort({ date: 1 })
-      .populate(['subject', 'teacher'])
+      .populate(['subject', 'teacher', 'section', 'semester', 'session'])
 
     if (sheets.length <= 0) {
       return res
@@ -98,7 +98,7 @@ const generateSubjectReport = async (req, res) => {
         .send({ message: 'No records found', type: 'sheets' })
     }
 
-    const tableColumn = ['ID', 'Name', 'Roll no']
+    const tableColumn = ['ID', 'Roll no', 'Name']
     const tableRows = []
 
     for (let i = 0; i < sheets.length; i++) {
@@ -106,15 +106,18 @@ const generateSubjectReport = async (req, res) => {
         sheet: sheets[i]._id,
       })
         .sort({ rollNo: 1 })
-        .populate('student')
+        .populate({
+          path: 'student',
+          populate: ['program', 'session'],
+        })
 
-      tableColumn.push(moment(sheets[i].date).format('DD/MM/YYYY'))
+      tableColumn.push(i + 1)
       for (let j = 0; j < attendanceRecords.length; j++) {
         if (!!!tableRows[j])
           tableRows[j] = [
             attendanceRecords[j].student._id,
+            `${attendanceRecords[j].student.session.session_title}-${attendanceRecords[j].student.program.program_abbreviation}-${attendanceRecords[j].student.rollNo}`,
             attendanceRecords[j].student.name,
-            attendanceRecords[j].student.rollNo,
             attendanceRecords[j].leave
               ? 'L'
               : attendanceRecords[j].present
@@ -138,10 +141,20 @@ const generateSubjectReport = async (req, res) => {
       const percentage = Math.round(
         (presentDays / (tableRows[i].length - 2)) * 100,
       )
+      tableRows[i].push(presentDays)
       tableRows[i].push(`${percentage}%`)
     }
 
+    tableColumn.push('Total')
     tableColumn.push('%')
+    tableRows.push(['', '', ''])
+
+    for (let i = 0; i < sheets.length; i++) {
+      tableRows[tableRows.length - 1].push(
+        moment(sheets[i].date).format('DD/MM/YYYY'),
+      )
+    }
+
     tableColumn.shift()
     tableRows.map(row => row.shift())
 
@@ -150,9 +163,19 @@ const generateSubjectReport = async (req, res) => {
       tableRows,
       subject_name: sheets[0].subject.subject_title,
       teacher_name: sheets[0].teacher.name,
+      course_code: sheets[0].subject.subject_code,
+      section: sheets[0].section.section_title[0].toUpperCase(),
+      semester: sheets[0].semester.semester_title,
+      session: `${moment(sheets[0].session.starting_year).format(
+        'YYYY',
+      )} - ${moment(sheets[0].session.starting_year).format('YYYY')}`,
+      semester_start_date: moment(sheets[0].semester.starting).format('LL'),
     })
   } catch (err) {
     console.log(err)
+    return res
+      .status(500)
+      .send({ message: 'Something went wrong', type: 'error' })
   }
 }
 

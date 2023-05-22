@@ -152,11 +152,11 @@ const getSemesterById = async (req, res) => {
 }
 
 const updateSemester = async (req, res) => {
-  const { semester } = req.params
+  const { semesterId } = req.params
   const { _id, ...rest } = req.body
 
   try {
-    await Model.findOneAndReplace({ _id: semester }, { ...rest })
+    await Model.findOneAndReplace({ _id: semesterId }, { ...rest })
     return res
       .status(200)
       .send({ message: 'Successfully updated', type: 'semester' })
