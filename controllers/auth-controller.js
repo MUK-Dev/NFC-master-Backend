@@ -4,7 +4,6 @@ const { Student, Parent, Admin, Teacher } = require('../models/user-models')
 const { genToken } = require('../utils/generate-token')
 const createAvatarHash = require('../utils/createAvatarHash')
 const Program = require('../models/program-model')
-const Section = require('../models/section-model')
 const Session = require('../models/session-model')
 
 const emailRegexp =
@@ -87,6 +86,7 @@ const registerStudent = async (req, res) => {
       avatar,
       section,
       session,
+      gender,
       program,
       rollNo,
       phoneNo,
