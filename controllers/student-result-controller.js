@@ -2,9 +2,10 @@ const { StudentMark } = require('../models/mark-model')
 const { GRADE } = require('../utils/gpaGrade')
 
 const studentAllResult = async (req, res, next) => {
+  const id = req.body.studentId
   try {
     const studentResult = await StudentMark.find({
-      student: req.userInfo.tokenUser.id,
+      student: id,
     }).populate({
       path: 'markSheet',
       populate: ['semester', 'theory_teacher', 'subject'],
@@ -125,9 +126,10 @@ const studentAllResult = async (req, res, next) => {
 }
 
 const studentPDFResult = async (req, res, next) => {
+  const id = req.body.studentId
   try {
     const studentResult = await StudentMark.find({
-      student: req.userInfo.tokenUser.id,
+      student: id,
     }).populate({
       path: 'markSheet',
       populate: ['semester', 'theory_teacher', 'subject', 'program', 'session'],

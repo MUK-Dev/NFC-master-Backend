@@ -8,8 +8,8 @@ const {
 
 const router = express.Router()
 
-router.route('/api/student-result').get(isAuth, studentAllResult)
+router.route('/api/student-result').post(isAuth, studentAllResult)
 
-router.route('/api/student-result/report').get(isAuth, studentPDFResult)
+router.route('/api/student-result/report').post(isAuth, studentPDFResult)
 
 module.exports = router
