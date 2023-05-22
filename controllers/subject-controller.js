@@ -113,7 +113,7 @@ const getAllSubjects = async (req, res) => {
 
 const getSubject = async (req, res) => {
   try {
-    const subjects = await Model.find({ semester: req.body.subjectId })
+    const subjects = await Model.find({ semester: req.body.semesterId })
     const subjectData = []
 
     for (let j = 0; j < subjects.length; j++) {
