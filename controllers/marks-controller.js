@@ -2,6 +2,7 @@ const { Student } = require('../models/user-models')
 const { MarkSheet, StudentMark } = require('../models/mark-model')
 const Subject = require('../models/subject-model')
 const { GPA, GRADE } = require('../utils/gpaGrade')
+const { log } = require('winston')
 
 const studentMarks = async (req, res, next) => {
   const count = await MarkSheet.countDocuments({
@@ -350,11 +351,76 @@ const updateMarkList = async (req, res) => {
       .send({ type: 'server', message: 'Something went wrong update' })
   }
 
-  res.status(200).send({ message: 'Marked attendance', type: 'mark-result' })
+  res.status(200).send({ message: 'Marked marks', type: 'mark-result' })
+}
+
+const repeaterMarkList = async (req, res) => {
+  const { subject, mark } = req.body.marksDTO
+
+  try {
+    const count = await StudentMark.countDocuments({
+      student: mark.student,
+      markSheet: req.params.sheetId,
+    })
+    if (count > 0) {
+      return res
+        .status(404)
+        .send({ type: 'sheet', message: 'Mark already Entered' })
+    } else {
+      const selectedSubject = await Subject.findById(subject)
+      const theory_hours = selectedSubject.theory_hours
+      const lab_hours = selectedSubject.lab_hours
+      let total = 0
+      let theory_total = 0
+      let lab_total = 0
+      let gpa = 0
+      let grade = 'F'
+      if (lab_hours === '0') {
+        mark.lab_final = 0
+        mark.lab_sessional = 0
+      }
+      if (theory_hours === '0') {
+        mark.mids = 0
+        mark.finals = 0
+        mark.sessional = 0
+      }
+      if (!(mark.mids === '') && !(mark.lab_final === '')) {
+        theory_total =
+          parseFloat(mark.mids) +
+          parseFloat(mark.finals) +
+          parseFloat(mark.sessional)
+        lab_total = parseFloat(mark.lab_final) + parseFloat(mark.lab_sessional)
+        total =
+          (parseFloat(theory_total) * parseFloat(theory_hours) +
+            parseFloat(lab_total) * parseFloat(lab_hours)) /
+          (parseFloat(theory_hours) + parseFloat(lab_hours))
+        gpa = GPA(total)
+        grade = GRADE(gpa)
+      }
+
+      const repeaterStudentMarks = StudentMark({
+        ...mark,
+        markSheet: req.params.sheetId,
+        theory_total,
+        lab_total,
+        total,
+        gpa,
+        grade,
+      })
+      await repeaterStudentMarks.save()
+    }
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(500)
+      .send({ type: 'server', message: 'Something went wrong update' })
+  }
+  res.status(200).send({ message: 'Marked marks', type: 'mark-result' })
 }
 
 module.exports = {
   studentMarks,
   markMarksList,
   updateMarkList,
+  repeaterMarkList,
 }
