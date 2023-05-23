@@ -1,6 +1,21 @@
 const { StudentMark } = require('../models/mark-model')
 const { GRADE } = require('../utils/gpaGrade')
 
+function generateUniqueArray(arr) {
+  const uniqueNames = new Map()
+  for (const obj of arr) {
+    const { subject_code, total } = obj
+    if (uniqueNames.has(subject_code)) {
+      if (total > uniqueNames.get(subject_code).total) {
+        uniqueNames.set(subject_code, obj)
+      }
+    } else {
+      uniqueNames.set(subject_code, obj)
+    }
+  }
+  return Array.from(uniqueNames.values())
+}
+
 const studentAllResult = async (req, res, next) => {
   const id = req.body.studentId
   try {
@@ -11,7 +26,7 @@ const studentAllResult = async (req, res, next) => {
       populate: ['semester', 'theory_teacher', 'subject'],
     })
 
-    const modifiedResultArray = studentResult.map(data => ({
+    const studentResultArray = studentResult.map(data => ({
       _id: data._id,
       mids: data.mids,
       finals: data.finals,
@@ -30,6 +45,8 @@ const studentAllResult = async (req, res, next) => {
       subject_lab: data.markSheet.subject.lab_hours,
       theory_teacher: data.markSheet.theory_teacher.name,
     }))
+
+    const modifiedResultArray = generateUniqueArray(studentResultArray)
 
     const resultsBySemester = {}
     if (modifiedResultArray) {
@@ -143,7 +160,7 @@ const studentPDFResult = async (req, res, next) => {
         studentResult[0].markSheet.program.program_abbreviation,
     }
 
-    const modifiedResultArray = studentResult.map(data => ({
+    const studentResultArray = studentResult.map(data => ({
       _id: data._id,
       mids: data.mids,
       finals: data.finals,
@@ -162,6 +179,8 @@ const studentPDFResult = async (req, res, next) => {
       subject_lab: data.markSheet.subject.lab_hours,
       theory_teacher: data.markSheet.theory_teacher.name,
     }))
+
+    const modifiedResultArray = generateUniqueArray(studentResultArray)
 
     const resultsBySemester = {}
     if (modifiedResultArray) {
