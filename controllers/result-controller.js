@@ -1,6 +1,6 @@
 const { MarkSheet, StudentMark } = require('../models/mark-model')
 
-const getAllResultSheets = async (req, res) => {
+const getResultSheets = async (req, res) => {
   try {
     const resultSheets = await MarkSheet.find({
       $or: [
@@ -163,8 +163,29 @@ const generateClassResultReport = async (req, res) => {
   }
 }
 
+const getAllResultSheets = async (req, res) => {
+  try {
+    const allResultSheets = await MarkSheet.find({})
+      .sort({ date: -1 })
+      .populate([
+        'theory_teacher',
+        'department',
+        'program',
+        'session',
+        'section',
+        'semester',
+        'subject',
+      ])
+    res.status(200).send(allResultSheets)
+  } catch (err) {
+    console.log(err)
+    res.status(500).send({ type: 'server', message: 'Something went wrong' })
+  }
+}
+
 module.exports = {
-  getAllResultSheets,
+  getResultSheets,
   findResultSheetById,
   generateClassResultReport,
+  getAllResultSheets,
 }
