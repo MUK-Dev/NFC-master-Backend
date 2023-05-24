@@ -42,6 +42,8 @@ const findResultSheetById = async (req, res) => {
       resultSheet,
       list: resultList,
       subject_Id: resultSheet.subject._id,
+      theory_hours: resultSheet.subject.theory_hours,
+      lab_hours: resultSheet.subject.lab_hours,
       session_title: resultSheet.session.session_title,
       program_abbreviation: resultSheet.program.program_abbreviation,
       section_title: resultSheet.section.section_title,
