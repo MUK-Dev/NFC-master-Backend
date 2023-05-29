@@ -32,9 +32,8 @@ const registerStudent = async (req, res) => {
     const userProgram = await Program.findById(program)
     const userSession = await Session.findById(session)
 
-    email = `${
-      userSession.session_title
-    }${userProgram.program_abbreviation.toLowerCase()}${rollNo}@undergrad.nfciet.edu.pk`
+    email = `${userSession.session_title.toLowerCase()}${userProgram.program_abbreviation.toLowerCase()}${rollNo}@undergrad.nfciet.edu.pk`
+    email = email.toLowerCase()
   } catch (err) {
     console.log(err)
     return res
@@ -134,7 +133,8 @@ const registerParent = async (req, res) => {
   let avatar
   let existingParent
 
-  const { name, email, password, phoneNo } = req.body
+  let { name, email, password, phoneNo } = req.body
+  email = email.toLowerCase()
 
   console.table({
     name,
@@ -213,7 +213,8 @@ const registerAdmin = async (req, res) => {
   let avatar
   let existingAdmin
 
-  const { name, email, password, phoneNo } = req.body
+  let { name, email, password, phoneNo } = req.body
+  email = email.toLowerCase()
 
   console.table({
     name,
@@ -290,7 +291,9 @@ const registerTeacher = async (req, res) => {
   let avatar
   let existingTeacher
 
-  const { name, email, password, phoneNo, subjects } = req.body
+  let { name, email, password, phoneNo, subjects } = req.body
+
+  email = email.toLowerCase()
 
   console.table({
     name,
@@ -350,7 +353,7 @@ const registerTeacher = async (req, res) => {
     const token = genToken(user)
 
     res.status(202).send({
-      token,
+      message: 'Successfully registered',
       type: 'register',
     })
   } catch (err) {
@@ -367,7 +370,9 @@ const registerTeacher = async (req, res) => {
 
 const login = async (req, res, next) => {
   let foundUser
-  const { email, password } = req.body
+  let { email, password } = req.body
+  email = email.toLowerCase()
+
   try {
     foundUser = await Student.findOne({ email })
     if (!foundUser) foundUser = await Parent.findOne({ email })
