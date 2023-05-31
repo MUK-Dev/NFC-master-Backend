@@ -260,6 +260,7 @@ const generateAnySubjectReport = async (req, res) => {
       subject_name: sheets[0].subject.subject_title,
       course_code: sheets[0].subject.subject_code,
       section: sheets[0].section.section_title[0].toUpperCase(),
+      teacher_name: sheets[0].teacher.name,
       semester: sheets[0].semester.semester_title,
       session: `${moment(sheets[0].session.starting_year).format(
         'YYYY',
