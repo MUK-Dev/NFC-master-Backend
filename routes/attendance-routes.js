@@ -7,6 +7,7 @@ const {
   markAttendanceByQr,
   updateAttendanceList,
   generateSubjectReport,
+  generateAnySubjectReport,
   getStudentCalendarData,
 } = require('../controllers/attendance-controller')
 
@@ -37,6 +38,28 @@ const isAuth = require('../middleware/isAuth')
  *       500:
  *        description: Something went wrong (Server error)
  * /api/attendance/subject-report:
+ *  post:
+ *     tags:
+ *     - Attendance
+ *     description: Generates attendance report for subject with teacher token
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *              $ref: '#/components/schemas/SubjectAttendanceReportRequest'
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/SubjectAttendanceReportResponse'
+ *       404:
+ *        description: Invalid request
+ *       500:
+ *        description: Something went wrong (Server error)
+ * /api/attendance/any-subject-report:
  *  post:
  *     tags:
  *     - Attendance
@@ -189,6 +212,10 @@ router
 router
   .route('/api/attendance/subject-report')
   .post(isAuth, generateSubjectReport)
+
+router
+  .route('/api/attendance/any-subject-report')
+  .post(isAuth, generateAnySubjectReport)
 
 router
   .route('/api/attendance/student/calendar-data')

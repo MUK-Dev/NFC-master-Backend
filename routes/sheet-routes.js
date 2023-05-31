@@ -1,8 +1,9 @@
 const express = require('express')
 
 const {
-  getAllSheets,
+  getAllTeacherSheets,
   findSheetById,
+  getAllSheets,
 } = require('../controllers/sheet-controller')
 const isAuth = require('../middleware/isAuth')
 
@@ -13,6 +14,22 @@ const isAuth = require('../middleware/isAuth')
  *     tags:
  *     - Sheets
  *     description: Returns all sheets of a teacher
+ *     responses:
+ *       200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/GetAllSheetsResponse'
+ *       404:
+ *        description: Invalid request
+ *       500:
+ *        description: Something went wrong (Server error)
+ * /api/all-sheets:
+ *  get:
+ *     tags:
+ *     - Sheets
+ *     description: Returns all sheets
  *     responses:
  *       200:
  *        description: Success
@@ -50,7 +67,9 @@ const isAuth = require('../middleware/isAuth')
 
 const router = express.Router()
 
-router.route('/api/sheets').get(isAuth, getAllSheets)
+router.route('/api/sheets').get(isAuth, getAllTeacherSheets)
+
+router.route('/api/all-sheets').get(isAuth, getAllSheets)
 
 router.route('/api/sheet/:sheetId').get(isAuth, findSheetById)
 
